@@ -1,0 +1,115 @@
+{% extends 'book/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Choose Subscription</h2>
+    <div class="row">
+        <div class="col-md-6">
+<div class="col-md-6">
+    <h3>Stripe</h3>
+    <form id="payment-form">
+        <div class="form-group">
+            <label for="card-holder-name">Card Holder Name</label>
+            <input type="text" class="form-control" id="card-holder-name">
+        </div>
+        <div class="form-group">
+            <label for="card-element">Card Information</label>
+            <div id="card-element" class="form-control"></div>
+            <div id="card-errors" role="alert"></div>
+        </div>
+        <button id="card-button" class="btn btn-primary mt-3" type="submit">Subscribe with Stripe</button>
+    </form>
+</div>
+</div>
+<div class="col-md-6">
+    <h3>PayPal</h3>
+    
+    <div id="paypal-button-container"></div>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="subscription_type" value="regular" data-price="5" id="regular">
+        <label class="form-check-label" for="regular">Regular ($5)</label>
+    </div>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="subscription_type" value="premium" data-price="10" id="premium">
+        <label class="form-check-label" for="premium">Premium ($10)</label>
+    </div>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="subscription_type" value="xtra" data-price="20" id="xtra">
+        <label class="form-check-label" for="xtra">Xtra ($20)</label>
+    </div>
+</div>
+<!-- Add the cancel button after the payment buttons -->
+<button onclick="window.location.href='{% url 'book:cancel_url' %}'" class="btn btn-secondary mt-3">Cancel</button>
+
+</div>
+</div>
+
+<script>
+// Stripe Elements
+const stripe = Stripe('YOUR_STRIPE_PUBLIC_KEY');
+const elements = stripe.elements();
+
+const cardElement = elements.create('card');
+cardElement.mount('#card-element');
+
+const cardButton = document.getElementById('card-button');
+const cardHolderName = document.getElementById('card-holder-name');
+
+cardButton.addEventListener('click', async (e) => {
+e.preventDefault();
+
+const { paymentMethod, error } = await stripe.createPaymentMethod(
+    'card', cardElement, {
+        billing_details: { name: cardHolderName.value }
+    }
+);
+
+if (error) {
+    // Display error message
+    console.log(error);
+} else {
+    // Process the payment
+    console.log(paymentMethod);
+}
+});
+
+function getSelectedSubscriptionPrice() {
+const subscriptionRadios = document.getElementsByName('subscription_type');
+for (const radio of subscriptionRadios) {
+    if (radio.checked) {
+        return radio.getAttribute('data-price');
+    }
+}
+return null;
+}
+
+// PayPal SDK
+paypal.Buttons({
+createOrder: function(data, actions) {
+    const price = getSelectedSubscriptionPrice();
+    if (!price) {
+        console.error('No subscription selected');
+        return;
+    }
+
+    // Set up the transaction
+    return actions.order.create({
+        purchase_units: [{
+            amount: {
+                value: price
+            }
+        }]
+    });
+},
+onApprove: function(data, actions) {
+    // Capture the funds from the transaction
+    return actions.order.capture().then(function(details) {
+        // Show a success message to the buyer
+        console.log('Transaction completed by ' + details.payer.name.given_name);
+    });
+}
+}).render('#paypal-button-container');
+
+</script>
+
+{% endblock content %}

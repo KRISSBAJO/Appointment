@@ -1,0 +1,28 @@
+{% extends "book/base.html" %}
+
+{% block content %}
+<style>
+    /* Custom CSS styles */
+    .bg-gradient {
+        background: linear-gradient(45deg, #3f51b5, #9c27b0);
+    }
+</style>
+<div class="text-center bg-gradient text-white py-5">
+    <h1 class="display-4">Payment Successful</h1>
+    <p class="lead">Thank you for your payment.</p>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="form-container">
+                <div class="text-center">
+                    <h2 class="h3 mb-3 fw-normal">Payment Details</h2>
+                    <p>Your payment has been successfully processed.</p>
+                    <p><a href="{% url 'book:index' %}" class="btn btn-primary">Return to Home</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

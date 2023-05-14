@@ -1,0 +1,87 @@
+{% extends 'book/base.html' %}
+
+{% block content %}
+<style>
+    .bg-gradient {
+        background: linear-gradient(45deg, #3f51b5, #9c27b0);
+    }
+.view-service{
+    background-color: #3f51b5;
+    border-color: #3f51b5;
+}
+.view-service:hover{
+    background-color: #9c27b0;
+    border-color: #9c27b0;
+}
+.No-search-result{
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    border: 1px solid #3f51b5;
+    border-radius: 5px;
+    padding: 20px;
+    border-color: #3f51b5;
+    color: #3f51b5;
+    font-size: 20px;
+
+}
+</style>
+<div class="text-center bg-gradient text-white py-5">
+    <div class="container">
+        <h1 class="display-4">Welcome to LogaXP</h1>
+        <p class="lead">Search Results of Vendors</p>
+    </div>
+</div>
+    <section class="search-results-section">
+        <div class="container">
+        
+            {% if clients %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Company Name</th>
+                            
+                            <th scope="col">Services</th>
+                            <th scope="col">Work Hours Start</th>
+                            <th scope="col">Work Hours End</th>
+                            <th scope="col">Business Number</th>
+                            <th scope="col">City</th>
+                            <th scope="col">State</th>
+                            <th scope="col">Country</th>
+                        
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for client in clients %}
+                            <tr>
+                                <td>{{ client.business_name }}</td>
+                                
+                                <td>
+                                    <a href="{% url 'book:client_services' client.user.username %}" class="btn btn-sm btn-primary view-service ">View services</a>
+                                   
+                                </td>
+                                <td>{{ client.working_hours_start }}</td>
+                                <td>{{ client.working_hours_end }}</td>
+                                <td>{{ client.contact_phone }}</td>
+                                <td>{{ client.city }}</td>  
+                                <td>{{ client.state }}</td>
+                                <td>{{ client.country }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+               <div class="No-search-result">
+                <p>No results found for your search.</p>
+                <p>Suggestions:</p>
+                <ul>
+                    <p>Try A More General Category</p>
+                </ul>
+                </div>
+
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}
+
+

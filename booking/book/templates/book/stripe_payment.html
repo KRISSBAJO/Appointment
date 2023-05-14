@@ -1,0 +1,138 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stripe Payment</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 0 auto;
+            back-ground-color: red;
+        }
+        form {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f5f5f5;
+            padding: 20px;
+            margin-top: 50px;
+        }
+        label {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        #card-element {
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 80px;
+        }
+        button {
+            background-color: #0275d8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #01589c;
+        }
+        #card-errors {
+            color: red;
+            margin-bottom: 10px;
+        }
+        .stripe {
+            background-color: #f5f5f5;
+            padding: 20px;
+            margin-top: 50px;
+        }
+        .text-center {
+            text-align: center;
+
+        }
+        .bg-gradient {
+            background: linear-gradient(to right, #ff9966, #ff5e62);
+            margin-top: 180px;
+        }
+
+
+    </style>
+</head>
+<div class="text-center bg-gradient text-white py-5">
+    <div class="container">
+        <h1 class="display-4">Welcome to LogaXP</h1>
+        <p class="lead">Make Your Payment With Easy</p>
+    </div><br>
+<body>
+    <div class="stripe">
+    <h1 class"text-center">Stripe Payment</h1>
+    <form action="{% url 'book:stripe_payment' %}" method="post" id="payment-form">
+        {% csrf_token %}
+        <div class="form-row">
+            <label for="card-element">
+                Credit or debit card
+            </label>
+            <div id="card-element"></div>
+            <div id="card-errors" role="alert"></div>
+        </div>
+        <button>Submit Payment</button>
+    </form>
+    </div>
+    <script>
+        var stripe = Stripe('{{ stripe_publishable_key }}');
+        var elements = stripe.elements();
+
+        var card = elements.create('card');
+        card.mount('#card-element');
+
+        card.addEventListener('change', function(event) {
+            var cardErrorDisplayElement = document.getElementById('card-errors');
+            if (event.error) {
+                cardErrorDisplayElement.textContent = event.error.message;
+            } else {
+                cardErrorDisplayElement.textContent = '';
+            }
+            });
+            
+            // Handle form submission
+            var form = document.getElementById('payment-form');
+            form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            stripe.createToken(card).then(function(result) {
+                if (result.error) {
+                    // Inform the user if there was an error
+                    var errorElement = document.getElementById('card-errors');
+                    errorElement.textContent = result.error.message;
+                } else {
+                    // Send the token to your server
+                    stripeTokenHandler(result.token);
+                }
+            });
+            });
+            
+            // Submit the form with the token ID
+            function stripeTokenHandler(token) {
+            // Insert the token ID into the form so it gets submitted to the server
+            var form = document.getElementById('payment-form');
+            var hiddenInput = document.createElement('input');
+            hiddenInput.setAttribute('type', 'hidden');
+            hiddenInput.setAttribute('name', 'stripeToken');
+            hiddenInput.setAttribute('value', token.id);
+            form.appendChild(hiddenInput);
+            
+            // Submit the form
+            form.submit();
+            }
+            </script>
+            </body>
+            </html>
+            
+
+            

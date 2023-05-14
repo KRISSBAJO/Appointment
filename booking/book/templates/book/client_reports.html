@@ -1,0 +1,97 @@
+{% extends 'book/base.html' %}
+
+{% block content %}
+<style>
+    .bg-gradient {
+        background: linear-gradient(45deg, #3f51b5, #9c27b0);
+    }
+    .thead {
+        background: linear-gradient(45deg, #3f51b5, #9c27b0);
+        color: white;
+    }
+</style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <div class="text-center bg-gradient text-white py-5">
+        <div class="container">
+            <h1 class="display-4">Welcome to LogaXP</h1>
+            <p class="lead">View you Booking Reports</p>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <h2 class="text-center my-4">Appointment Reports</h2>
+        <!-- Add the Export to Excel button -->
+    <div class="text-right mb-3">
+        <a href="{% url 'book:export_appointments' %}" class="btn btn-success">Export to Excel</a>
+    </div>
+    
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="thead">
+                    <tr>
+                        <th scope="col">Serial Number</th>
+                        <th scope="col">Appointment ID</th>
+                        <th scope="col">Customer Name</th>
+                        <th scope="col">Service</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Time</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Deposit</th>
+                        <th scope="col">Deposit Paid</th>
+                        <th scope="col">Balance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appointment in appointments %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ appointment.id }}</td>
+                            <td>{{ appointment.customer.full_name }}</td>
+                            <td>{{ appointment.service.name }}</td>
+                            <td>{{ appointment.date|date:"F j, Y" }}</td>
+                            <td>{{ appointment.time|time:"g:i A" }}</td>
+                            <td>{{ appointment.status }}</td>
+                            <td>{{ appointment.service.price }}</td>
+                            <td>{{ appointment.service.deposit_amount }}</td>
+                            <td>{{ appointment.deposit_paid }}</td>
+                            <td>{{ appointment.service.balance }}</td>
+
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center">No appointments found.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>                
+            </table>
+            <!-- Add pagination links -->
+            <div class="d-flex justify-content-center">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        {% if appointments.has_previous %}
+                            <li class="page-item"><a class="page-link" href="?page=1">&laquo;</a></li>
+                            <li class="page-item"><a class="page-link" href="?page={{ appointments.previous_page_number }}">previous</a></li>
+                        {% endif %}
+
+                        {% for i in appointments.paginator.page_range %}
+                            {% if appointments.number == i %}
+                                <li class="page-item active"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if appointments.has_next %}
+                            <li class="page-item"><a class="page-link" href="?page={{ appointments.next_page_number }}">next</a></li>
+                            <li class="page-item"><a class="page-link" href="?page={{ appointments.paginator.num_pages }}">&raquo;</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends 'book/base.html' %}
+
+{% block content %}
+<style>
+    .bg-gradient {
+        background: linear-gradient(45deg, #3f51b5, #9c27b0);
+    }
+    #add-time {
+      
+        padding: 2px 4px;
+        border-radius: 5px;
+      
+       
+    }
+    #delete_all {
+        margin-bottom: 20px;
+        padding: 5px 8px;
+        border-radius: 10px;
+        border-color: #fff; 
+        margin-left: 76%;  
+    }
+    .pagination {
+        margin-top: 20px;
+        margin-left: 40%;
+    }
+  
+</style>
+<div class="text-center bg-gradient text-white py-5">
+    <div class="container">
+        <h1 class="display-4">Welcome to LogaXP</h1>
+        <p class="lead">View available time slots</p>
+    </div>
+</div>
+
+<div class="container py-5">
+   
+    <form method="post" action="{% url 'book:time_slot_delete_all' %}" onsubmit="return confirm('Are you sure you want to delete all time slots?');">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-sm btn-danger" id="delete_all">Delete All Time Slots</button>
+    </form>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Service</th>
+                <th>Actions</th>
+                <th>Add</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for time_slot in time_slots %}
+                <tr>
+                    <td>{{ time_slot.date }}</td>
+                    <td>{{ time_slot.time }}</td>
+                    <td>{{ time_slot.service }}</td>
+                    <td>
+                        <a href="{% url 'book:time_slot_update' time_slot.pk %}" class="btn btn-sm btn-info">Edit</a>
+                        <a href="{% url 'book:time_slot_delete' time_slot.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                    <td><a href="{% url 'book:time_slot_create' %}" class="btn btn-sm btn-success" id="add-time">Add Time Slot</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+    
+            <span class="current-page">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+    
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+    
+{% endblock %}

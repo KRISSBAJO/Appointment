@@ -1,0 +1,276 @@
+{% extends 'book/base.html' %}
+{% load widget_tweaks %}
+{% load custom_filters %}
+
+{% block content %}
+<style>
+#book-aapointment {
+    margin-top: 50px;
+    margin-bottom: 50px;
+    margin-left: 50px;
+   
+}
+#book-aapointment .card {
+    height: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 5px #ccc;
+    width: 100%;
+}
+#book-aapointment .card-header {
+    background-color: #fff;
+    border-bottom: 1px solid #ccc;
+    border-radius: 5px 5px 0 0;
+}
+#book-aapointment .card-body {
+    padding: 20px;
+}
+#your-appointment {
+    margin-top: -380px;
+    margin-bottom: 50px;
+    margin-left: 360px;
+}
+.name{
+    color: #007bff;
+    font-weight: bold;
+    font-size: 30px;
+
+}
+.bg-gradient {
+    background: linear-gradient(45deg, #3f51b5, #9c27b0);
+}
+.messages {
+    color: red;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 12px;
+}
+
+    
+</style>
+
+<div class="text-center bg-gradient text-white py-5">
+    <div class="container">
+        <h1 class="display-4">Customer Dashboard</h1>
+        <p class="lead" ><span class="name">{{ request.user.first_name }}</span> Welcome to your dashboard!</p>
+    </div>
+</div>
+
+<div class="container" id="book-aapointment">
+    <div class="row" >
+        <div class="col-md-4" >
+            <div class="card" >
+                <div class="card-header">
+                    Book Appointment
+                </div>
+                <div class="card-body">
+                    <p>Select a client to book an appointment:</p>
+                    <form id="booking-form" method="post">
+                        {% csrf_token %}
+                        
+                        {{ form.date|attr:"id:dateInput" }}
+                        <div class="form-group">
+                            <label for="id_time_slot">Time:</label>
+                            {{ form.time_slot|attr:"id:id_time_slot" }} <!-- Add the ID here -->
+                        </div>
+                            {{ form.name }}
+                            {{ form.email }}
+                            {{ form.phone_number }} 
+                        <div class="input-group">
+                            <select class="form-control" name="client" id="client-select" required>
+                                <option value="">-- Choose Client --</option>
+                                {% for client in clients %}
+                                <option value="{{ client.id }}" data-username="{{ client.user.username }}">{{ client.business_name }}</option>
+                                {% endfor %}
+                            </select>
+                            <select class="form-control" name="service" id="service-select" required>
+                                <option value="">-- Choose Service --</option>
+                            </select>
+                            <select class="form-control" name="service_type" id="service-type-select" required>
+                                <option value="">-- Choose Service Type --</option>
+                            </select>                    
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary">Book</button>
+                            </div>
+                        </div>
+                    </form>                    
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12" id="your-appointment">
+            <div class="card">
+                <div class="card-header">
+                    Your Appointments
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Service</th>
+                                <th>Client</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for appointment in appointments %}
+                            <tr>
+                                <td>{{ appointment.date }}</td>
+                                <td>{{ appointment.time }}</td>
+                                <td>{{ appointment.service.name }}</td>
+                                <td>{{ appointment.service.client.business_name }}</td>
+                                <td>{{ appointment.status }}</td>
+                                <td>
+                                    <a href="{% url 'book:edit_appointment' appointment.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                                    <a href="{% url 'book:add_review' appointment.service.id %}" class="btn btn-sm btn-success">Rate</a>
+                                </td>
+                             {% if messages %}
+                            <div class="messages">
+                                {% for message in messages %}
+                                    <div{% if message.tags %} class="{{ message.tags }} alert-message"{% endif %}>{{ message }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center">No appointments found</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="client-service-mapping" value="{{ client_service_mapping }}">
+<script>
+    function getServiceId() {
+        return document.getElementById('service-select').value;
+    }
+    
+    function getDate() {
+        return document.getElementById('dateInput').value;
+    }
+    
+    function fetchAvailableSlots(date, serviceId) {
+        fetch(`/api/available-slots/?date=${date}&service_id=${serviceId}`)
+            .then(response => response.json())
+            .then(data => {
+                const timeSlotsDropdown = document.getElementById('id_time_slot');
+                timeSlotsDropdown.innerHTML = '';
+    
+                const now = new Date();
+    
+                data.available_slots.forEach(slot => {
+                    const slotDateTime = new Date(date + 'T' + slot.time);
+                    if (slotDateTime > now) {
+                        const option = document.createElement('option');
+                        option.value = slot.id;
+                        option.text = slot.time;
+                        timeSlotsDropdown.add(option);
+                    }
+                });
+            });
+    }
+    
+    function onFormElementChange() {
+        const date = getDate();
+        const serviceId = getServiceId();
+        if (date && serviceId) {
+            fetchAvailableSlots(date, serviceId);
+        }
+    }
+    
+    document.getElementById('dateInput').addEventListener('change', onFormElementChange);
+    document.getElementById('service-select').addEventListener('change', onFormElementChange);
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        const dateInput = document.getElementById('dateInput');
+        const today = new Date();
+        const minDate = today.toISOString().split('T')[0];
+        dateInput.setAttribute('min', minDate);
+        
+        // Add this line to call the function when the page is loaded
+        onFormElementChange();
+    });
+    
+
+    document.getElementById('client-select').addEventListener('change', (e) => {
+        const clientId = e.target.value;
+        console.log('client-service-mapping content:', document.getElementById('client-service-mapping').textContent);
+        let clientServiceMapping;
+
+        try {
+        const jsonString = document.getElementById('client-service-mapping').value;
+        clientServiceMapping = JSON.parse(jsonString);
+        } catch (error) {
+        console.error('Error parsing JSON data:', error);
+        }
+        console.log('Client Service Mapping:', clientServiceMapping);
+        const services = clientServiceMapping[clientId] || [];
+        console.log('Services for selected client:', services);
+    
+        const serviceSelect = document.getElementById('service-select');
+        console.log('Service Select element:', serviceSelect); // Add this line
+        serviceSelect.innerHTML = '<option value="">-- Choose Service --</option>';
+    
+        for (const service of services) {
+            const option = document.createElement('option');
+            option.value = service.id;
+            option.textContent = service.name;
+            serviceSelect.appendChild(option);
+        }
+    
+        // Trigger the 'change' event for the service-select element to update the available time slots
+        const event = new Event('change');
+        serviceSelect.dispatchEvent(event);
+    });
+    
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const clientSelect = document.getElementById('client-select');
+        const bookingForm = document.getElementById('booking-form');
+
+        clientSelect.addEventListener('change', function() {
+            const selectedClientUsername = this.options[this.selectedIndex].dataset.username;
+            const newActionUrl = `{% url 'book:client_booking' 'PLACEHOLDER' %}`.replace('PLACEHOLDER', selectedClientUsername);
+            bookingForm.setAttribute('action', newActionUrl);
+        });
+    });
+</script>
+<script>
+    document.getElementById('service-select').addEventListener('change', (e) => {
+        const serviceId = e.target.value;
+        updateServiceTypeSelect(serviceId);
+    });
+    
+    function updateServiceTypeSelect(serviceId) {
+        // Fetch the service types for the selected service from your backend
+        fetch(`/api/service-types/?service_id=${serviceId}`)
+            .then(response => response.json())
+            .then(data => {
+                const serviceTypeSelect = document.getElementById('service-type-select');
+                serviceTypeSelect.innerHTML = '<option value="">-- Choose Service Type --</option>';
+    
+                data.forEach(serviceType => {
+                    const option = document.createElement('option');
+                    option.value = serviceType.id;
+                    option.text = serviceType.name;
+                    serviceTypeSelect.add(option);
+                });
+            });
+    }
+    
+</script>
+
+
+{% endblock %}
+

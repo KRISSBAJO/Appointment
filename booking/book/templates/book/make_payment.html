@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Make Payment</title>
+</head>
+<body>
+    <h1>Test PayPal Payment</h1>
+    <form method="post" action="{% url 'book:make_payment' %}">
+        {% csrf_token %}
+        <button type="submit">Pay with PayPal</button>
+    </form>
+</body>
+</html>

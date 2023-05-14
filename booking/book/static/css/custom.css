@@ -1,0 +1,67 @@
+/* Add some spacing to the main content */
+main {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Ensure the footer stays at the bottom */
+main::before {
+    content: "";
+    height: 100%;
+}
+main::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+footer {
+    width: 100%;
+    position: relative;
+    clear: both;
+}
+
+/* Add some styling to the navbar */
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+.nav-link {
+    font-size: 1.1rem;
+}
+.nav-link:hover {
+    color: #007bff;
+}
+/* Style the form */
+.form-container {
+    background-color: #f8f9fa;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-group label {
+    font-weight: bold;
+}
+
+.form-control {
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+}
+
+.form-submit-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.form-submit-btn:hover {
+    background-color: #0056b3;
+}
+

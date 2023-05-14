@@ -1,0 +1,175 @@
+{% extends 'book/base.html' %}
+{% load static %}
+
+<link href="{% static 'css/features.css' %}" rel="stylesheet">
+
+{% block content %}
+<style>
+.container {
+    max-width: 1200px;
+}
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    border: none;
+    border-radius: 5px;
+    margin-bottom: 30px;
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.card-body {
+    padding: 30px;
+}
+
+.card-title {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.card-subtitle {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.btn-primary {
+    background-color: #007BFF;
+    border-color: #007BFF;
+}
+
+/* Custom CSS styles */
+.bg-gradient {
+    background: linear-gradient(45deg, #3f51b5, #9c27b0);
+}
+
+.form-container {
+    max-width: 400px;
+    padding: 1.5rem;
+    margin: auto;
+}
+
+.form-signin {
+    width: 100%;
+}
+
+.form-floating:focus-within {
+    z-index: 2;
+}
+.why-choose-us {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 40px;
+}
+
+.why-choose-us-card {
+    flex: 0 0 48%;
+    margin-bottom: 30px;
+}
+
+/* Add margin to create extra space */
+h2 {
+    margin-bottom: 30px;
+}
+
+.Meet-Our-Team {
+    margin-top: 30px;
+}
+
+
+</style>
+<div class="text-center bg-gradient text-white py-5">
+    <div class="container">
+        <h1 class="display-4">Welcome to LogaXP</h1>
+        <p class="lead">Empowering Businesses with Innovative HR and IT Solutions</p>
+    </div>
+    
+</div>
+<div class="container mt-5">
+
+    <div class="container mt-5">
+        <h2>Meet Our Team</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Christopher Adebajo</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Founder and CEO</h6>
+                        <p>Christopher Adebajo, a visionary entrepreneur, founded LogaXP in 2021. With his extensive experience in HR and IT, John has been the driving force behind the company's innovative solutions and growth.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Patience Omoye</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Chief Technology Officer</h6>
+                        <p>Patience Omoye, a seasoned IT professional, leads our technology initiatives. Her expertise in software development and passion for automation has helped LogaXP build cutting-edge solutions for businesses.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Jason Adebajo</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Chief Operations Officer</h6>
+                        <p>Jason Adebajo oversees the day-to-day operations at LogaXP. With a strong background in HR, she ensures that our clients receive the best possible experience when using our appointment booking application.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Gerry O </h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Company Secretary</h6>
+                        <p>As the company secretary, Gerry O plays a crucial role in ensuring that LogaXP stays compliant with all regulatory requirements. His diligent work allows the rest of the team to focus on delivering exceptional service to our clients.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container mt-5">
+            <h2>Why Choose LogaXP</h2>
+            <div class="why-choose-us">
+                <div class="card why-choose-us-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Industry Expertise</h5>
+                        <p>LogaXP boasts a team of professionals with extensive experience in HR and IT. Our experts leverage their industry knowledge to deliver cutting-edge solutions tailored to your business needs.</p>
+                    </div>
+                </div>
+                <div class="card why-choose-us-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Innovative Solutions</h5>
+                        <p>Our booking application is designed to simplify appointment management and enhance overall productivity. We continuously refine our products to ensure they remain innovative and effective.</p>
+                    </div>
+                </div>
+                <div class="card why-choose-us-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Customizable Services</h5>
+                        <p>We understand that every business is unique. LogaXP offers customizable solutions that can be adapted to suit your specific requirements, ensuring optimal results and increased efficiency.</p>
+                    </div>
+                </div>
+                <div class="card why-choose-us-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Dedicated Support</h5>
+                        <p>Our team is committed to providing exceptional customer service. We work closely with our clients to address their concerns and offer guidance, ensuring they get the most out of our products and services.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="mt-5">
+            <h4>Our Booking Application</h4>
+            <p>LogaXP's booking application was designed to address the growing need for a seamless appointment scheduling solution. It simplifies the process of booking appointments, managing schedules, and keeping track of customer data. By integrating the latest technologies, our booking application offers a user-friendly experience for both businesses and their clients. We are continuously working on improving and expanding the features of our booking application to help businesses thrive in today's fast-paced world.</p>
+    
+            <h4>Ready to experience the difference?</h4>
+            <a class="btn btn-primary" href="{% url 'book:register' %}" role="button">Get Started with LogaXP</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}

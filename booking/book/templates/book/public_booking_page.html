@@ -1,0 +1,109 @@
+{% extends 'book/base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+<div class="jumbotron">
+  <div class="container">
+      <h1 class="display-4">Welcome to LogaXP</h1>
+      <p class="lead">Book Appointment</p>
+  </div>
+</div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <h2 class="text-center mb-4">Book an appointment with {{ client.business_name }}</h2>
+        <div class="form-container">
+          <form method="post" action="{% url 'book:client_booking' client.user.username %}">
+            {% csrf_token %}
+            <div class="form-row">
+              {% for field in form %}
+                <div class="form-group col-md-6">
+                  <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                  {{ field|add_class:"form-control" }}
+                </div>
+              {% endfor %}
+              <!-- Add the time slots dropdown -->
+              <div class="form-group col-md-6">
+                <label for="timeSlots">Time:</label>
+                <select id="timeSlots" class="form-control"></select>
+                <input type="hidden" id="selected_time_slot" name="time_slot">
+              </div>
+            </div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary">Book Appointment</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+<script>
+  function getDate() {
+    const day = document.getElementById('id_date_day').value;
+    const month = document.getElementById('id_date_month').value;
+    const year = document.getElementById('id_date_year').value;
+    return `${year}-${month}-${day}`;
+  }
+
+  function fetchAvailableSlots(date, serviceId) {
+    // Fetch available time slots from the API
+    fetch(`/api/available-slots/?date=${date}&service_id=${serviceId}`)
+      .then(response => response.json())
+      .then(data => {
+        // Clear the time slots dropdown
+        const timeSlotsDropdown = document.getElementById('timeSlots');
+        timeSlotsDropdown.innerHTML = '';
+
+        // Get the current date and time
+        const now = new Date();
+
+        // Add the fetched time slots to the dropdown
+        data.available_slots.forEach(slot => {
+          // Check if the slot is in the future
+          const slotDateTime = new Date(date + 'T' + slot.time);
+          if (slotDateTime > now) {
+            const option = document.createElement('option');
+            option.value = slot.id;
+            option.text = slot.time;
+            timeSlotsDropdown.add(option);
+          }
+        });
+      });
+  }
+
+  function onFormElementChange() {
+    const date = getDate();
+    const serviceId = document.getElementById('id_service').value;
+    if (date && serviceId) {
+      fetchAvailableSlots(date, serviceId);
+    }
+  }
+
+  // Add event listeners to the date and service elements to trigger the onFormElementChange function
+  document.getElementById('id_date_day').addEventListener('change', onFormElementChange);
+  document.getElementById('id_date_month').addEventListener('change', onFormElementChange);
+  document.getElementById('id_date_year').addEventListener('change', onFormElementChange);
+  document.getElementById('id_service').addEventListener('change', onFormElementChange);
+
+  // Add this event listener to the timeSlots dropdown
+  document.getElementById('timeSlots').addEventListener('change', event => {
+    const selectedSlotId = event.target.value;
+    document.getElementById('selected_time_slot').value = selectedSlotId;
+  });
+
+  // Set min date attribute for the date input fields
+  document.addEventListener('DOMContentLoaded', () => {
+    const dateDayInput = document.getElementById('id_date_day');
+    const dateMonthInput = document.getElementById('id_date_month');
+    const dateYearInput = document.getElementById('id_date_year');
+    const today = new Date();
+    const minMonth = (today.getMonth() + 1).toString().padStart(2, '0');
+    const minDay = today.getDate().toString().padStart(2, '0');
+
+    dateYearInput.setAttribute('min', today.getFullYear());
+    dateMonthInput.setAttribute('min', minMonth);
+    dateDayInput.setAttribute('min', minDay);
+  });
+</script>
+
+{% endblock content %}

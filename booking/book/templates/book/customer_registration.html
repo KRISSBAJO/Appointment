@@ -1,0 +1,94 @@
+{% extends 'book/base.html' %}
+
+{% block content %}
+<style>
+    /* Custom CSS styles */
+    .bg-gradient {
+        background: linear-gradient(45deg, #3f51b5, #9c27b0);
+    }
+
+    .form-container {
+        max-width: 400px;
+        padding: 1.5rem;
+        margin: auto;
+    }
+
+    .form-signin {
+        width: 100%;
+    }
+
+    .form-floating:focus-within {
+        z-index: 2;
+    }
+    .container {
+        margin-top: 50px;
+    }
+    .bt-custom {
+        background-color: #3f51b5;
+        color: #fff;
+    }
+    .bt-custom:hover {
+        background-color: #9c27b0;
+        color: #fff;
+    }
+    .card {
+        border-radius: 0;
+    }
+    .card-header {
+        background-color: #3f51b5;
+        color: #fff;
+        text-align: center;
+        text-transform: uppercase;
+        font-weight: bold;
+
+    }
+    .card-body {
+        padding: 2rem;
+    }
+    .card-body .btn {
+        width: 100%;
+    }
+    .card-body .btn:hover {
+        background-color: #9c27b0;
+        color: #fff;
+    }
+   
+</style>
+<div class="text-center bg-gradient text-white py-5">
+    <div class="container">
+        <h1 class="display-4">Customer Registration Portal</h1>
+        <p class="lead">Create your account to book appointments and manage your bookings.</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-header">Create An Account</div>    
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            {{ form.name.label_tag }} {{ form.name }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.email.label_tag }} {{ form.email }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.phone_number.label_tag }} {{ form.phone_number }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.password1.label_tag }} {{ form.password1 }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.password2.label_tag }} {{ form.password2 }}
+                        </div>
+                        <button type="submit" class="btn bt-custom">Register</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

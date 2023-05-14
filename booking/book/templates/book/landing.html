@@ -1,0 +1,378 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logaxp - HR Management</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+  <!-- Bootstrap JavaScript and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.ico">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@800&display=swap');
+    .company-name {
+      font-family:  'Oswald', sans-serif;
+      font-weight: 900;
+      font-size: 2.5rem;
+      display: inline-block;
+    }
+    
+    .logo-part1 {
+      color: #ff5733; /* Change the value to your preferred color */
+    }
+    
+    .logo-part2 {
+        color: #33c3ff; /* Change the value to your preferred color */
+        transform: skewX(-10deg);
+      }
+      
+    
+    @import url('https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap');
+    .logo-part3 {
+      color: #33ff57; 
+      font-family: 'Bree Serif', serif;
+      font-size: 2.5rem;
+      display: inline-block;
+    }
+    
+
+/* General styles */
+body {
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.8;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 100;
+  margin-top: 0;
+}
+
+/* Hero Section */
+.jumbotron {
+  background-color: #eff1ed;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  text-align: center;
+}
+
+/* Features Section */
+#features h2 {
+  font-weight: 100;
+  margin-bottom: 1rem;
+}
+
+#features p {
+  margin-bottom: 2rem;
+}
+
+/* Footer */
+footer {
+  background-color: #457b9d;
+}
+
+footer p {
+  margin-bottom: 0.5rem;
+}
+
+/* Whitespace */
+.container {
+  padding-top: 2.2rem;
+  padding-bottom: 3rem;
+}
+
+.py-5 {
+  padding-top: 8rem !important;
+  padding-bottom: 3rem !important;
+}
+
+.navbar {
+  margin-bottom: 2rem;
+  background-color: #a8dadc;   
+}
+
+.mb-2 {
+  margin-bottom: 3rem !important;
+}
+
+.mb-3 {
+  margin-bottom: 1rem !important;
+}
+
+.mb-4 {
+  margin-bottom: 1.5rem !important;
+}
+
+.ml-3 {
+  margin-left: 1rem !important;
+}
+p, h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 1rem; /* Increase the value as needed */
+  }
+  .card {
+    margin-bottom: 2rem; /* Increase the value as needed */
+  }
+    .card-title {
+        margin-bottom: 0.5rem; /* Increase the value as needed */
+    }
+.mr-2{
+    color: #ffffff  !important;
+}
+.address{
+    color: #ffffff  !important;
+}
+.active a {
+    color: #ffffff  !important;
+}
+.card-img-top {
+    width: 100%;
+    height: 12vw;
+    object-fit: cover;
+}
+.nav-link{
+    color: #ffffff  !important;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: 'Roboto', sans-serif;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 0.1rem 3rem;
+    transition: color 0.3s ease-in-out;
+    border-color: #ffffff !important;
+    border: 1px solid #ffffff !important;
+    background-color: #68b0ab !important;
+}
+.nav-link:hover, .nav-link:focus {
+    color: #ae2012 !important; /* Change the value to your preferred color */
+    text-decoration: none;
+  }
+  
+  .nav-link.active {
+    color: #ae2012 !important; /* Change the value to your preferred color */
+  }
+  .navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  .sign {
+    color: #ffffff  !important;
+    font-size: 1.2rem;
+    font-weight: 500;
+    font-family: 'Roboto', sans-serif;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem 1rem;
+    transition: color 0.3s ease-in-out;
+    background-color: #219ebc !important;
+    border-color: #ffffff !important;
+  }
+    .sign:hover, .sign:focus {
+        color: #ffffff  !important; /* Change the value to your preferred color */
+        text-decoration: none;
+    }
+    .sign.active {
+        color: #ffffff  !important; /* Change the value to your preferred color */
+    }
+    .btn-primary {
+        color: #ffffff  !important;
+        background-color: #219ebc !important;
+        border-color: #ffffff !important;
+    }
+    .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
+        color: #ffffff  !important;
+        background-color: #219ebc !important;
+        border-color: #ffffff !important;
+    }
+    section {
+        padding-top: 4rem; /* Increase the value as needed */
+        padding-bottom: 8rem; /* Increase the value as needed */
+      }
+
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 200,
+          'GRAD' 0,
+          'opsz' 20
+        }
+
+  
+  
+
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+        <h1 class="company-name"><span class="logo-part1">Lo</span><span class="logo-part2">ga</span><span class="logo-part3">XP</span></h1>
+
+      <a class="navbar-brand" href=""></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+          <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
+          <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact Us</a></li>
+        </ul>
+        <a class="btn sign ml-3" href="/signin">Sign In</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="home" class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <h1 class="display-4">Revolutionize Your HR Management with Logaxp</h1>
+      <p class="lead">Streamline your HR processes with our powerful and user-friendly application</p>
+      <a href="/signup" class="btn btn-primary">Get Started for Free</a>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="container py-5">
+    <div class="row">
+      <div class="col-md-4 text-center">
+        <img class="mb-4" src="{% static 'img/employee-management-icon.png' %}" alt="Employee Management Icon" style="width: 40px;">
+        <h2 class="material-symbols-outlined ">Employee MGT</h2>
+        <p>Efficiently manage your workforce with our comprehensive employee management tools</p>
+      </div>
+      <div class="col-md-4 text-center">
+        <img class="mb-4" src="{% static 'img/time-tracking-icon.png' %}" alt="Time Tracking Icon" style="width: 30px;">
+        <h2 class="material-symbols-outlined">Time Tracking</h2>
+        <p>Easily track and manage employee hours with our intuitive time tracking features</p>
+      </div>
+      <div class="col-md-4 text-center">
+        <img class="mb-4" src="{% static 'img/payroll.png' %}" alt="Payroll Icon" style="width: 40px;">
+        <h2 class="material-symbols-outlined ">Payroll</h2>
+        <p>Simplify your payroll process with automated calculations and customizable settings</p>
+      </div>
+    </div>
+  </section>
+ <!-- Partners or Clients Section -->
+<section id="partners" class="container py-5">
+    <h2 class="text-center mb-5">Our Clients and Partners</h2>
+    <div class="row text-center">
+      <div class="col-md-3 col-sm-6 mb-4">
+        <img src="{% static 'img/newlogo12.png' %}" alt="Goal" class="rounded-circle" height="80" width="80">
+      </div>
+      <div class="col-md-3 col-sm-6 mb-4">
+        <img src="{% static 'img/Ourclientslogo.png' %}" alt="Goal" class="rounded-circle" height="80" width="80">
+      </div>
+      <div class="col-md-3 col-sm-6 mb-4">
+        <img src="{% static 'img/logo2.png' %}" alt="Goal" class="rounded-circle" height="80" width="80">
+      </div>
+      <div class="col-md-3 col-sm-6 mb-4">
+        <img src="{% static 'img/logo1.png' %}" alt="Goal" class="rounded-circle" height="80" width="80">
+
+      </div>
+    </div>
+  </section>
+  
+  <!-- Case Studies Section -->
+<section id="case-studies" class="container py-5">
+    <h2 class="text-center mb-5">Case Studies</h2>
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <img  src="{% static 'img/case2.png' %}" class="card-img-top" alt="Case Study 1 Image">
+          <div class="card-body">
+            <h5 class="card-title">Case Study 1</h5>
+            <p class="card-text">A brief description of how Logaxp helped Company 1 streamline their HR processes.</p>
+            <a href="#" class="btn btn-primary">Read More</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <img  src="{% static 'img/ourgoal.png' %}" class="card-img-top" alt="Case Study 2 Image">
+          <div class="card-body">
+            <h5 class="card-title">Case Study 2</h5>
+            <p class="card-text">A brief description of how Logaxp helped Company 2 improve their employee management.</p>
+            <a href="#" class="btn btn-primary">Read More</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <img src="{% static 'img/case.png' %}" class="card-img-top" alt="Case Study 3 Image">
+          <div class="card-body">
+            <h5 class="card-title">Case Study 3</h5>
+            <p class="card-text">A brief description of how Logaxp helped Company 3 simplify their payroll process.</p>
+            <a href="#" class="btn btn-primary">Read More</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+
+  <!-- Footer -->
+  <footer class=" py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <nav>
+            <ul class="list-unstyled active">
+              <li><a href="#home">Home</a></li>
+              <li><a href="#features">Features</a></li>
+              <li><a href="#pricing">Pricing</a></li>
+              <li><a href="#about">About Us</a></li>
+              <li><a href="#contact">Contact Us</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="col-md-4 address">
+          <p>Address: 1105 Berry Street, Old Hickory, TN 37565</p>
+          <p>Phone: (555) 123-4567</p>
+          <p>Email: info@logaxp.com</p>
+        </div>
+        <div class="col-md-4">
+          <div class="social-media mb-3">
+            <a href="#" class="mr-2">Facebook</a>
+            <a href="#" class="mr-2">Twitter</a>
+            <a href="#" class="mr-2">LinkedIn</a>
+            <a href="#" class="mr-2" >Instagram</a>
+          </div>
+          <form>
+            <label for="newsletter" class="d-block mb-2">Subscribe to our newsletter</label>
+            <div class="input-group">
+              <input type="email" id="newsletter" name="newsletter" class="form-control" placeholder="Enter your email">
+              <div class="input-group-append">
+                <button type="submit" class="btn btn-primary">Subscribe</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Optional JavaScript for smooth scrolling -->
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
+
+

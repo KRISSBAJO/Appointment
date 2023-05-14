@@ -1,0 +1,94 @@
+{% extends 'book/base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    .spacing {
+        margin-top: 50px;
+    }
+    .jumbotron {
+        background-image: url("{% static 'img/krissbajo_Mobile-Friendly.png' %}");
+        background-size: cover;
+        background-position: center;
+        height: 300px;
+        color: white;
+        text-align: center;
+        padding-top: 100px;
+    }
+    .jumbotron h1 {
+        font-size: 60px;
+        font-weight: 700;
+    }
+    .jumbotron p {
+        font-size: 20px;
+        font-weight: 300;
+    }
+    .jumbotron a {
+        font-size: 20px;
+        font-weight: 300;
+    }
+    .jumbotron a:hover {
+        background-color: #1f1f1f;
+    }
+    .jumbotron a:active {
+        background-color: #1f1f1f;
+    }
+    .img-fluid {
+        width: 100%;
+        height: 60%;
+    }
+    .fa-3x
+    {
+        font-size: 3em;
+        color: #e76f51;
+    }
+    .fa-3x:hover
+    {
+        color: #1f1f1f;
+    }
+    .fa-3x:active
+    {
+        color: #1f1f1f;
+    }
+    .fa-3x:focus
+    {
+        color: #1f1f1f;
+    }
+   
+
+
+</style>
+<div class="jumbotron">
+    <h1 class="display-4">Seamless Mobile Experience</h1>
+    <p class="lead">Stay connected and in control of your appointments, no matter where you are. Our cutting-edge mobile-friendly design adapts to any screen size, providing a seamless experience on smartphones, tablets, and other devices. Enjoy unparalleled accessibility, and never miss a beat with LogaXP's versatile and intuitive appointment management platform.</p>
+    <a href="#" class="btn btn-primary btn-lg">Try it Now</a>
+</div>
+<div class="container">
+    <h2>Key Features</h2>
+    <div class="row">
+        <div class="col-md-4 text-center spacing">
+            <i class="fas fa-sync fa-3x mb-3"></i>
+            <h3>Real-time Syncing</h3>
+            <p>Your appointments are always up-to-date and accessible across all your devices.</p>
+        </div>
+        <div class="col-md-4 text-center spacing">
+            <i class="fas fa-thumbs-up fa-3x mb-3"></i>
+            <h3>User-friendly Interface</h3>
+            <p>Manage your appointments effortlessly with our clean and intuitive design.</p>
+        </div>
+        <div class="col-md-4 text-center spacing">
+            <i class="fas fa-rocket fa-3x mb-3"></i>
+            <h3>Fast Performance</h3>
+            <p>Experience blazing-fast performance and quick response times on all devices.</p>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <h2>Stay Connected</h2>
+            <p>With LogaXP, you'll never miss an important appointment again. Receive notifications and reminders on your mobile device, ensuring that you're always in the loop and up-to-date with your schedule.</p>
+        </div>
+        <div class="col-md-6">
+            <img src="{% static 'img/krissbajo_Mobile-Friendly.png' %}"  alt="Mobile devices" class="img-fluid">
+        </div>
+    </div>
+</div>
+{% endblock %}

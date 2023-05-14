@@ -1,0 +1,27 @@
+# .gitignore
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Django specific files
+*.log
+*.pot
+*.pyc
+db.sqlite3
+media/
+
+# Virtual environment
+venv/
+*.egg-info/
+
+# IDE files
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini

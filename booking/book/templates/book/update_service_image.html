@@ -1,0 +1,71 @@
+
+{% extends 'book/base.html' %}
+
+{% block content %}
+<style>
+    .bg-gradient {
+        background: linear-gradient(45deg, #3f51b5, #9c27b0);
+    }
+  
+    .container1 {
+        margin-top: 100px;
+        text-align: center;
+
+    }
+    #update{
+        margin-top: 100px;
+
+    }
+    #update h2{
+        margin-bottom: 20px;
+    }
+   #update button{
+       margin-top: 20px;
+       background-color: #00C9FF;
+       border: none;
+       color: white;
+       padding: 10px 20px;
+       text-align: center;
+       text-decoration: none;
+       display: inline-block;
+       font-size: 16px;
+       border-radius: 10px;
+   }
+   #update button:hover{
+       background-color: #92FE9D;
+       color: black;
+   }
+    #update input{
+         margin-bottom: 20px;
+    }
+    #update label{
+        font-size: 20px;
+    }
+   
+
+   
+    
+
+</style>
+   
+    <div class="text-center bg-gradient text-white py-5">
+        <div class="container1">
+            <h1 class="display-4">Welcome to LogaXP</h1>
+            <p class="lead">Find your vendor</p>
+        </div>
+      </div>
+      <div class="container" id="update">
+        <h2 class="text-center">Update Service Image</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <img src="{{ service.image.url }}" class="img-fluid">
+        </div>
+        <form method="post" id="update-form" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" id="update">Update</button>
+        </form>
+    </div>
+    
+    </div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'book/base.html' %}
+
+{% block content %}
+<style>
+    /* Custom CSS styles */
+    .bg-gradient {
+        background: linear-gradient(45deg, #3f51b5, #9c27b0);
+    }
+
+    .form-container {
+        max-width: 400px;
+        padding: 1.5rem;
+        margin: auto;
+    }
+
+    .form-signin {
+        width: 100%;
+    }
+
+    .form-floating:focus-within {
+        z-index: 2;
+    }
+    #price{
+        margin-top: 50px;
+    }
+   
+</style>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<div class="text-center bg-gradient text-white py-5">
+    <div class="container">
+        <h1 class="display-4">Welcome to LogaXP</h1>
+        <p class="lead">Our Subscription Plans</p>
+    </div>
+</div>
+<div class="container" id="price">
+    
+    <div class="row">
+        {% for plan in plans %}
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="text-center">{{ plan.name }}</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-center">{{ plan.price }} per month</h5>
+                        <ul class="list-group list-group-flush">
+                            {% for feature in plan.features %}
+                                <li class="list-group-item">{{ feature }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{% url 'book:register' %}" class="btn btn-primary btn-block">Choose Plan</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

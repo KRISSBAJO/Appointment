@@ -1,0 +1,15 @@
+{% extends 'book/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="text-center">
+                <h1 class="mb-4">Payment Cancelled</h1>
+                <p>You have cancelled the payment process.</p>
+                <a href="{% url 'book:index' %}" class="btn btn-primary mt-3">Return to Home</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

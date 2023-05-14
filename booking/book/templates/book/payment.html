@@ -1,0 +1,166 @@
+{% extends 'book/base.html' %}
+
+{% block content %}
+
+<style>
+    .bg-gradient {
+        background: linear-gradient(45deg, #3f51b5, #9c27b0);
+    }
+    .deposit {
+        margin-bottom: 30px;
+        text-align: center;
+        font-weight: 300;
+        font-size: 2.5rem;
+    }
+
+        form {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f5f5f5;
+            padding: 20px;
+            margin-top: 50px;
+        }
+        label {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        #card-element {
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 80px;
+        }
+        button {
+            background-color: #0275d8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 15px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #ffaa00;
+        }
+        #card-errors {
+            color: red;
+            margin-bottom: 10px;
+        }
+        .stripe {
+            background-color: #f5f5f5;
+            padding: 20px;
+            margin-top: 50px;
+        }
+        .text-center {
+            text-align: center;
+
+        }
+</style>
+
+<div class="text-center bg-gradient text-white py-5">
+    <h1>Book an Appointment</h1>
+    <p class="lead">Please select a date and time for your appointment.</p>
+</div>
+
+<div class="container mt-5">
+    <h2 class="deposit">Deposit Payment</h2>
+   <hr>
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Stripe</h3>
+            <form id="payment-form">
+                <input type="hidden" name="appointment_id" value="{{ appointment.pk }}">
+                <div class="form-group">
+                    <label for="card-holder-name">Card Holder Name</label>
+                    <input type="text" class="form-control" id="card-holder-name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="card-element">
+                        Credit or debit card
+                    </label>
+                    <div id="card-element"></div>
+                    <div id="card-errors" role="alert"></div>
+                </div>
+                <button id="card-button" class="btn btn-primary mt-3" type="submit">Pay Deposit with Stripe</button>
+            </form>
+        </div>
+        <div class="col-md-5">
+            <h3>PayPal</h3>
+            <div id="paypal-button-container" data-appointment-id="{{ appointment.pk }}"></div>
+            <button> <a href="{% url 'book:initiate_payment' %}" class="list-group-item list-group-item-action">Pay With PayPall</a></button>
+        </div>
+    </div>
+</div>
+    <script>
+        var stripe = Stripe('{{ stripe_publishable_key }}');
+        var elements = stripe.elements();
+
+        var card = elements.create('card');
+        card.mount('#card-element');
+
+        card.addEventListener('change', function(event) {
+            var cardErrorDisplayElement = document.getElementById('card-errors');
+            if (event.error) {
+                cardErrorDisplayElement.textContent = event.error.message;
+            } else {
+                cardErrorDisplayElement.textContent = '';
+            }
+            });
+            
+            // Handle form submission
+            var form = document.getElementById('payment-form');
+            form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            stripe.createToken(card).then(function(result) {
+                if (result.error) {
+                    // Inform the user if there was an error
+                    var errorElement = document.getElementById('card-errors');
+                    errorElement.textContent = result.error.message;
+                } else {
+                    // Send the token to your server
+                    stripeTokenHandler(result.token);
+                }
+            });
+            });
+            
+            // Submit the form with the token ID
+            function stripeTokenHandler(token) {
+            // Insert the token ID into the form so it gets submitted to the server
+            var form = document.getElementById('payment-form');
+            var hiddenInput = document.createElement('input');
+            hiddenInput.setAttribute('type', 'hidden');
+            hiddenInput.setAttribute('name', 'stripeToken');
+            hiddenInput.setAttribute('value', token.id);
+            form.appendChild(hiddenInput);
+            
+            // Submit the form
+            form.submit();
+            }
+    // PayPal SDK
+    paypal.Buttons({
+        createOrder: function(data, actions) {
+            // Set up the transaction
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: 'XX' // Replace 'XX' with the deposit amount
+                    }
+                }]
+            });
+        },
+        onApprove: function(data, actions) {
+            // Capture the funds from the transaction
+            return actions.order.capture().then(function(details) {
+                // Show a success message to the buyer
+                console.log('Transaction completed by ' + details.payer.name.given_name);
+            });
+        }
+    }).render('#paypal-button-container');
+
+</script>
+
+{% endblock content %}

@@ -1,0 +1,39 @@
+{% extends 'book/base.html' %}
+
+{% block content %}
+<style>
+    /* Custom CSS styles */
+    .bg-gradient {
+        background: linear-gradient(45deg, #3f51b5, #9c27b0);
+    }
+</style>
+<div class="text-center bg-gradient text-white py-5">
+    <h1 class="display-4">Select a Subscription</h1>
+    <p class="lead">Choose a subscription plan to proceed with payment.</p>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="form-container">
+                <form method="post" action="{% url 'book:initiate_payment' %}">
+                    {% csrf_token %}
+                    <h2 class="h3 mb-3 fw-normal text-center">Subscription Type</h2>
+                    <div class="form-floating mb-3">
+                        <select class="form-control" id="subscription_type" name="subscription_type" required>
+                            {% for subscription_price in subscription_prices %}
+                            <option value="{{ subscription_price.subscription.id }}">
+                                {{ subscription_price.subscription.name }} - ${{ subscription_price.price }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <label for="subscription_type">Choose a plan</label>
+                    </div>
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Proceed to Payment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

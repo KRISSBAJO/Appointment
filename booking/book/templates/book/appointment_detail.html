@@ -1,0 +1,57 @@
+{% extends 'book/base.html' %}
+
+{% block content %}
+<style>
+    .bg-gradient {
+        background: linear-gradient(45deg, #3f51b5, #9c27b0, #c8b6ff, #3f51b5);
+    }
+</style>
+<div class="text-center bg-gradient text-white py-5">
+    <div class="container">
+        <h1 class="display-4">Appointment Details</h1>
+        <p class="lead">Here you can view the details of your appointment.</p>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card card-custom">
+                <div class="card-header card-header-custom text-center">
+                    <h2>{{ appointment.customer.full_name }}</h2>
+                </div>
+                <div class="card-body card-body-custom">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Service</th>
+                            <td>{{ appointment.service.name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Date</th>
+                            <td>{{ appointment.date }}</td>
+                        </tr>
+                        <tr>
+                            <th>Time</th>
+                            <td>{{ appointment.time }}</td>
+                        </tr>
+                        <tr>
+                            <th>Status</th>
+                            <td>{{ appointment.get_status_display }}</td>
+                        </tr>
+                    </table>
+                    
+                        <div class="text-center">
+                            <a href="{% url 'book:edit_appointment' appointment.id %}" class="btn btn-primary">Edit Appointment</a>
+                            {% if user.customer %}
+                                <a href="{% url 'book:customer_dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+                            {% elif user.client %}
+                                <a href="{% url 'book:dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+                            {% endif %}
+                     
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

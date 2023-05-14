@@ -1,0 +1,145 @@
+{% extends 'book/base.html' %}
+
+{% block content %}
+<style>
+  /* Custom CSS styles */
+  .bg-gradient {
+      background: linear-gradient(45deg, #3f51b5, #9c27b0);
+  }
+
+  .form-container {
+      max-width: 400px;
+      padding: 1rem;
+      margin: auto;
+  }
+
+  .form-signin {
+      width: 100%;
+  }
+
+  .form-floating:focus-within {
+      z-index: 2;
+  }
+  .container-fluid {
+      margin-top: 20px;
+  }
+</style>
+
+<div class="text-center bg-gradient text-white py-5">
+    <div class="container">
+        <h1 class="display-4">Welcome to LogaXP</h1>
+        <p class="lead">Book your Appointment</p>
+    </div>
+</div>
+<div class="container">
+  <h2 class="text-center my-4">Schedule an Appointment with {{ client.business_name }}</h2>
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-body">
+                  <form method="post" action="{% url 'book:client_booking' client.user.username %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="{{ form.service.auto_id }}">{{ form.service.label }}</label>
+                            {{ form.service }}
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.service_type.auto_id }}">{{ form.service_type.label }}</label>
+                            {{ form.service_type }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="dateInput">Date:</label>
+                            <input type="date" id="dateInput" name="{{ form.date.html_name }}" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.name.auto_id }}">{{ form.name.label }}</label>
+                            {{ form.name }}
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.email.auto_id }}">{{ form.email.label }}</label>
+                            {{ form.email }}
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.phone_number.auto_id }}">{{ form.phone_number.label }}</label>
+                            {{ form.phone_number }}
+                        </div>
+                        
+                        <!-- Add time slots dropdown and a hidden input field -->
+                        <div class="form-group">
+                          <label for="timeSlots">Time:</label>
+                          <select id="timeSlots" class="form-control"></select>
+                          <input type="hidden" id="selected_time_slot" name="{{ form.time_slot.html_name }}">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Book Appointment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add the JavaScript code for fetching available time slots -->
+<script>
+  function getDate() {
+    return document.getElementById('dateInput').value;
+  }
+  
+  function fetchAvailableSlots(date, serviceId) {
+    fetch(`/api/available-slots/?date=${date}&service_id=${serviceId}`)
+      .then(response => response.json())
+      .then(data => {
+        const timeSlotsDropdown = document.getElementById('timeSlots');
+        timeSlotsDropdown.innerHTML = '';
+
+        const now = new Date();
+
+        data.available_slots.forEach(slot => {
+          const slotDateTime = new Date(date + 'T' + slot.time);
+          if (slotDateTime > now) {
+            const option = document.createElement('option');
+            option.value = slot.id;
+            option.text = slot.time;
+            timeSlotsDropdown.add(option);
+          }
+        });
+
+        // Set the hidden input field value to the first available time slot
+        const hiddenInputField = document.getElementById('selected_time_slot');
+        if (data.available_slots.length > 0) {
+          hiddenInputField.value = data.available_slots[0].id;
+        } else {
+          hiddenInputField.value = '';
+        }
+      });
+  }
+
+  function onFormElementChange() {
+    const date = getDate();
+    const serviceId = document.getElementById('id_service').value;
+    if (date && serviceId) {
+      fetchAvailableSlots(date, serviceId);
+    }
+  }
+  
+  // Add event listeners to the date input and service elements to trigger the onFormElementChange function
+  document.getElementById('dateInput').addEventListener('change', onFormElementChange);
+  document.getElementById('id_service').addEventListener('change', onFormElementChange);
+
+  // Update the event listener for the timeSlots select element
+  document.getElementById('timeSlots').addEventListener('change', event => {
+    const selectedSlotId = event.target.value;
+    document.getElementById('selected_time_slot').value = selectedSlotId;
+  });
+  
+  // Set min date attribute for the date input field
+  document.addEventListener('DOMContentLoaded', () => {
+    const dateInput = document.getElementById('dateInput');
+    const today = new Date();
+    const minDate = today.toISOString().split('T')[0];
+    dateInput.setAttribute('min', minDate);
+  });
+</script>
+
+
+{% endblock %}

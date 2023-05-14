@@ -1,0 +1,124 @@
+{% extends 'book/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<style>
+    .container1 {
+        margin-top: 40px;
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+      
+        max-width: 1200px; /* This is optional, you can set a maximum width for the container */
+    }
+    .text-center {
+        text-align: center;
+    }
+    .text-white {
+        color: #fff;
+    }
+    
+    
+    .bg-gradient {
+        background: linear-gradient(45deg, #3f51b5, #9c27b0);
+    }
+    #calendar-head {
+        font-size: 30px;
+        font-weight: 300;
+    }
+    /* New styles */
+    #calendar {
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+    .fc-header-toolbar {
+        background-color: #f5f5f5;
+        border-radius: 5px;
+        padding: 10px;
+    }
+    .fc-button {
+        background-color: #9c27b0;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+    }
+    .fc-button:hover {
+        background-color: #3f51b5;
+    }
+    .fc-event {
+        background-color: #3f51b5;
+        border: none;
+        color: #fff;
+    }
+    .fc-event:hover {
+        background-color: #9c27b0;
+    }
+    
+    .fc-list-item-title:hover {
+        color: #fff;
+    }
+    
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
+<div class="text-center bg-gradient text-white py-5">
+    <h1>Calendar</h1>
+    <hr>
+    <p class="lead" id="calendar-head">{{ user.client.business_name }} Appointment Calendar</p>
+
+</div>
+<div class="container1">
+    <div id="calendar"></div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#calendar').fullCalendar({
+            events: function (start, end, timezone, callback) {
+                $.ajax({
+                    url: '{% url "book:client_calendar" %}',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        callback(data);
+                    },
+                    error: function () {
+                        alert('Error fetching events.');
+                    },
+                });
+            },
+            eventClick: function (calEvent, jsEvent, view) {
+                var appointment_id = calEvent.appointment_id;
+                // Fetch appointment details using the appointment_id
+                $.ajax({
+                    url: '{% url "book:get_appointment_details" %}',
+                    data: {
+                        'appointment_id': appointment_id
+                    },
+                    type: 'GET',
+                    success: function (data) {
+                        // Display appointment details using data returned from the server
+                        alert('Appointment Details: ' + data.details);
+                    },
+                    error: function () {
+                        alert('Error fetching appointment details.');
+                    },
+                });
+            },
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay',
+            },
+            defaultView: 'month',
+        });
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'book/base.html' %}
+
+{% block content %}
+{% load static %}
+<style>
+  .bg-gradient {
+    background: linear-gradient(45deg, #3f51b5, #9c27b0);
+}
+</style>
+<div class="text-center bg-gradient text-white py-5">
+  <div class="container">
+      <h1 class="display-4">Client Review Management</h1>
+      <p class="lead">Manage the reviews of your services</p>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <hr>
+      <h2 class="services">Reviews</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Service</th>
+            <th>Comment</th>
+            <th>Rating</th>
+            <th>Published</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for review in reviews %}
+            <tr>
+              <td>{{ review.user.username }}</td>
+              <td>{{ review.service.name }}</td>
+              <td>{{ review.comment }}</td>
+              <td>{{ review.rating }}/5</td>
+              <td>{{ review.published|yesno:"Yes,No" }}</td>
+              <td>
+                {% if not review.published %}
+                  <form method="POST" action="{% url 'book:publish_review' review.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Publish</button>
+                  </form>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,57 @@
+{% extends 'book/base.html' %}
+
+{% block content %}
+<style>
+    .card-custom {
+        border: none;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .card-header-custom {
+        background-color: #007bff;
+        color: white;
+    }
+    .card-body-custom {
+        padding: 1.5rem;
+    }
+    .form-control-custom {
+        border-radius: 0;
+        border-color: #007bff;
+    }
+    .btn-custom {
+        border-radius: 0;
+        background: linear-gradient(45deg, #3f51b5, #9c27b0);
+        border-color: #007bff;
+    }
+    .bg-gradient {
+        background: linear-gradient(45deg, #3f51b5, #9c27b0);
+    }
+</style>
+
+<div class="text-center bg-gradient text-white py-5">
+
+    <div class="container">
+        <h1 class="display-4">Manage Appointment</h1>
+        <p class="lead">Update the appointment details.</p>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card card-custom">
+                <div class="card-header card-header-custom text-center">
+                    <h2>Appointment Details</h2>
+                </div>
+                <div class="card-body card-body-custom">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary btn-block btn-custom">Update Appointment</button>
+                        <a href="{% url 'book:dashboard' %}" class="btn btn-secondary btn-block">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

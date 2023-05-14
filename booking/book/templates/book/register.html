@@ -1,0 +1,101 @@
+
+    {% extends 'book/base.html' %}
+
+    {% load static %}
+    {% load widget_tweaks %}
+    {% load countries %}
+    {% block extra_css %}
+        <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    {% endblock extra_css %}
+    
+    {% block content %}
+    <style>
+        .card-custom {
+            box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+            border-radius: 1rem;
+        }
+        
+        .card-header-custom {
+            background-color: #ffffff;
+            color: black;
+            border-radius: 1rem 1rem 0 0;
+        }
+        
+        .card-body-custom {
+            padding: 2rem;
+        }
+        
+        .form-control-custom {
+            border-radius: 0.5rem;
+        }
+        
+        
+        .bg-gradient {
+            background: linear-gradient(45deg, #3f51b5, #9c27b0);
+        }
+        </style>
+    
+    <div class="container1">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card card-custom">
+                    <div class="card-header card-header-custom text-center">
+                        <h2>Register</h2>
+                    </div>
+                    
+
+                    <div class="card-body card-body-custom">
+                        {% if form.errors %}
+                            <div class="alert alert-danger">
+                                <ul>
+                                {% for field in form %}
+                                    {% for error in field.errors %}
+                                    <li>{{ field.label }}: {{ error|escape }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                        <form method="post">
+                            {% csrf_token %}
+                            {% for field in form %}
+                            {{ field.errors }}
+                            {% endfor %}
+                            <div class="form-row">
+                                {% for field in form %}
+                                {% if field.label != "Working days" %}
+                                    <div class="form-group col-md-6">
+                                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                        {{ field|add_class:"form-control form-control-custom" }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            </div>
+    
+                            <!-- Add this block for working days checkboxes -->
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label for="{{ form.working_days.id_for_label }}">Working days</label>
+                                    <div class="d-flex flex-wrap">
+                                        {% for day in form.working_days.field.choices %}
+                                            <div class="custom-control custom-checkbox mr-2">
+                                                <input type="checkbox" class="custom-control-input" id="{{ form.working_days.auto_id }}_{{ forloop.counter }}" name="{{ form.working_days.html_name }}" value="{{ day.0 }}">
+                                                <label class="custom-control-label" for="{{ form.working_days.auto_id }}_{{ forloop.counter }}">{{ day.1 }}</label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <button type="submit" class="btn btn-primary btn-block btn-custom">Register</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+
+
+    {% endblock content %}
+    

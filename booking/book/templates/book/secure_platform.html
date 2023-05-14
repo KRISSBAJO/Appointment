@@ -1,0 +1,76 @@
+{% extends 'book/base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    .spacing {
+        margin-top: 50px;
+    }
+    .img-fluid {
+        width: 80%;
+        height: 70%;
+    }
+    .jumbotron {
+     
+        background-image: url("{% static 'img/secure_platform.png' %}");
+        background-size: cover;
+        background-position: center;
+        height: 400px;
+        color: white;
+        text-align: center;
+        padding-top: 150px;
+
+    }
+    .jumbotron h1 {
+        font-size: 50px;
+    }
+    .jumbotron p {
+        font-size: 20px;
+    }
+    .jumbotron a {
+        font-size: 20px;
+    }
+    .jumbotron a:hover {
+        background-color: #0d6efd;
+    }
+    .jumbotron a:active {
+        background-color: #0d6efd;
+    }
+    .fa-3x {
+        color: #0d6efd;
+    }
+</style>
+<div class="jumbotron">
+    <h1 class="display-4">Secure Platform</h1>
+    <p class="lead">At LogaXP, we prioritize the security of your data. Our robust infrastructure and privacy-focused features ensure your appointments and personal information are always protected.</p>
+    <a href="#" class="btn btn-primary btn-lg">Try it Now</a>
+</div>
+<div class="container">
+    <h2>Security Features</h2>
+    <div class="row">
+        <div class="col-md-4 text-center spacing">
+            <i class="fas fa-shield-alt fa-3x mb-3"></i>
+            <h3>Strong Data Encryption</h3>
+            <p>Your data is encrypted both in transit and at rest, ensuring its protection from unauthorized access.</p>
+        </div>
+        <div class="col-md-4 text-center spacing">
+            <i class="fas fa-user-shield fa-3x mb-3"></i>
+            <h3>Privacy Controls</h3>
+            <p>Take control of your data with our privacy settings, which allow you to manage who can access your information.</p>
+        </div>
+        <div class="col-md-4 text-center spacing">
+            <i class="fas fa-server fa-3x mb-3"></i>
+            <h3>Secure Infrastructure</h3>
+            <p>Our platform is built on a secure foundation, using industry best practices to safeguard your data.</p>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <h2>Reliable and Trustworthy</h2>
+            <p>With LogaXP, you can have peace of mind knowing that your data is secure. Our commitment to protecting your information means you can focus on what matters most - managing your appointments and staying organized.</p>
+        </div>
+        <div class="col-md-6">
+            <img src="{% static 'img/secure_platform.png' %}"  alt="Secure platform" class="img-fluid">
+        </div>
+    </div>
+</div>
+{% endblock %}

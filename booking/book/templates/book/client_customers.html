@@ -1,0 +1,87 @@
+{% extends 'book/base.html' %}
+
+{% load static %}
+
+{% block content %}
+<style>
+    .bg-gradient {
+        background: linear-gradient(45deg, #3f51b5, #9c27b0);
+    }
+
+</style>
+<!-- Add Bootstrap CSS and JS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<div class="text-center bg-gradient text-white py-5">
+    <div class="container">
+        <h1 class="display-4">Client Customers</h1>
+        <p class="lead">Get started with LogaXP today and revolutionize your appointment management.</p>
+    </div>
+</div>
+<div class="container">
+    <h2 class="text-center my-4"></h2>
+
+    <!-- Display the list of customers -->
+    <h4>Customers:</h4>
+    <table class="table table-striped mb-4">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for customer in customers %}
+            <tr>
+                <td>{{ customer.user.first_name }} {{ customer.user.last_name }}</td>
+                <td>{{ customer.user.email }}</td>
+                <td>{{ customer.phone_number }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </tab<!-- Add pagination links -->
+        <div class="d-flex justify-content-center">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    {% if customers.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page=1">&laquo;</a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{ customers.previous_page_number }}">previous</a></li>
+                    {% endif %}
+        
+                    {% for i in customers.paginator.page_range %}
+                        {% if customers.number == i %}
+                            <li class="page-item active"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                        {% else %}
+                            <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+        
+                    {% if customers.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ customers.next_page_number }}">next</a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{ customers.paginator.num_pages }}">&raquo;</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </table>
+
+        <!-- Display the client's service images -->
+        <h4>Service Images:</h4>
+        <div class="row">
+            {% for image in client.service_images.all %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card">
+                        <img src="{{ image.image.url }}" class="card-img-top" alt="{{ client.business_name }} - {{ image.image.name }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ client.business_name }}</h5>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+</div>
+{% endblock %}

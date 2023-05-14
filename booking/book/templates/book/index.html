@@ -1,0 +1,374 @@
+{% load static %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+    <title>LogaXP - Home</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    
+
+    <script src="{% static 'js/script.js' %}"></script>
+   
+    <style>
+        .search-section {
+            background-color: #f8f9fa;
+        }
+    
+        .search-form {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+    
+        .input-group {
+            width: 100%;
+        }
+    
+        .input-group-prepend,
+        .input-group-append {
+            display: none;
+        }
+    
+        .search-button {
+            margin-left: 10px;
+            width: 100%;
+        }
+    
+        #search-button-category {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+    
+        #search-button-client {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+        .company-name {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 2.5rem;
+            color: #fff;
+            margin-right: 10px;
+        }
+        .logo-part1{
+            color: #007bff;
+        }
+        .logo-part2{
+            color: #28a745;
+        }
+        .logo-part3{
+            color: #ffc107;
+        }
+        .logo{
+            height: 50px;
+            width: 50px;
+        }
+        #head-nav{
+            background-color: #fff;
+        }
+        .navbar-light .navbar-nav .nav-link{
+            color: #000;
+        }
+        .navbar-light .navbar-nav .nav-link:hover{
+            color: #007bff;
+        }
+        .navbar-light .navbar-nav .active>.nav-link{
+            color: #007bff;
+        }
+        .navbar-light .navbar-nav .active>.nav-link:hover{
+            color: #007bff;
+        }
+        .navbar-light .navbar-nav .nav-link:focus{
+            color: #007bff;
+        }
+        .navbar-light .navbar-nav .nav-link:active{
+            color: #007bff;
+        }
+        .navbar-light .navbar-nav .nav-link:visited{
+            color: #007bff;
+        }
+        .navbar-light .navbar-nav .nav-link:visited:hover{
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light " id="head-nav">
+        <div class="container">
+            <a class="navbar-brand" href="#"></a>
+            <h1 class="company-name"><span class="logo-part1">L</span><span class="logo-part2">oga</span><span class="logo-part3">XP</span></h1>
+            <img src="{% static 'img/companylogo.png' %}" class="logo" alt="LogaXP Logo">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'book:features' %}">About Us</a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'book:pricing' %}">Pricing</a>
+                    </li>                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'book:contact' %}">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'book:login' %}"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'book:login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'book:login' %}"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'book:login' %}"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'book:login' %}">FAQ</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-section text-center">
+        <div class="container">
+            <h1 class="display-3 spacing">LogaXP Appointment Booking</h1>
+            <p class="lead spacing">Revolutionizing appointment management for businesses of all sizes.</p>
+            <a href="{% url 'book:register' %}" class="btn btn-lg btn-outline-light">Get Started</a>
+        </div>
+    </section>
+    <!-- Add the search form here -->
+    <section class="search-section py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">Find the Services You Need</h2>
+            <p class="text-center mb-4" id="service">Search for the services you're looking for and book appointments with ease.</p>
+            <div class="row justify-content-center">
+                <div class="col-md-9">
+                    <div class="search-form">
+                        <!-- First form for searching categories -->
+                        <form method="get" action="{% url 'book:search_clients' %}">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                {% with form.category as category %}
+                                <select name="{{ category.html_name }}" id="category_autocomplete" {% if category.field.required %}required{% endif %}>
+                                    {% for option in category.field.choices %}
+                                    <option value="{{ option.0 }}" {% if option.0 == category.value|stringformat:"s" %}selected{% endif %}>{{ option.1 }}</option>      <br>
+                                    {% endfor %}
+                                </select>
+                                {% endwith %}
+                          
+                                <button type="submit" class="btn btn-primary search-button" id="search-button-category">Search by Category</button>
+                            </div>
+                        </form>
+    
+                        <!-- Second form for searching clients by business name -->
+                        <form method="get" action="{% url 'book:client_search_by_name' %}">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                {{ form.search }}
+                                <button type="submit" class="btn btn-success search-button" id="search-button-client">Search by Business Name</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+        <section class="goals-mission-section bg-light py-5">
+        <div class="container">
+            <h2 class="text-center mb-5" id="mission">Our Goal and Mission</h2>
+            <div class="row">
+                <div class="col-md-6 spacing">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="{% static 'img/ourgoal.png' %}" alt="Goal" class="rounded-circle" height="80" width="80">
+                                <h5 class="card-title ms-3">Our Goal</h5>
+                            </div>
+                            <p class="card-text">Our goal is to provide a seamless appointment booking experience for both businesses and their customers, making it easy and efficient for everyone involved.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 spacing">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="{% static 'img/ourmission.png' %}" alt="Mission" class="rounded-circle" height="80" width="80">
+                                <h5 class="card-title ms-3">Our Mission</h5>
+                            </div>
+                            <p class="card-text">Our mission is to empower businesses with innovative appointment booking solutions that streamline their processes, increase customer satisfaction, and drive growth.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+
+                    <section class="features-section py-5">
+                        <div class="container">
+                            <h2 class="text-center mb-5">Why Choose LogaXP?</h2>
+                            <div class="row">
+                                <div class="col-md-4 text-center spacing">
+                                    <a href="{% url 'book:easy_scheduling' %}">
+                                        <i class="fas fa-calendar-check fa-3x mb-3"></i>
+                                    </a>
+                                    <h3>Easy Scheduling</h3>
+                                    <p>Effortlessly book appointments with our intuitive and user-friendly interface.</p>
+                                </div>
+                                <div class="col-md-4 text-center spacing">
+                                    <a href="{% url 'book:mobile_friendly' %}">
+                                        <i class="fas fa-mobile-alt fa-3x mb-3"></i>
+                                    </a>
+                                    <h3>Mobile-Friendly</h3>
+                                    <p>Access and manage your appointments on-the-go with our responsive design that works on any device.</p>
+                                </div>
+                                <div class="col-md-4 text-center spacing">
+                                    <a href="{% url 'book:secure-platform' %}">
+                                        <i class="fas fa-lock fa-3x mb-3"></i>
+                                    </a>
+                                    <h3>Secure Platform</h3>
+                                    <p>Keep your data safe with our secure infrastructure and privacy-focused features.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+    
+                    <button onclick="scrollToTop()" id="scrollToTopBtn" title="Go to top">&uarr;</button>
+                    <section class="testimonials-section bg-light py-5">
+                        <div class="container">
+                            <h2 class="text-center mb-5"Id="say">What Our Clients Say</h2>
+                            <div class="row">
+                                <div class="col-md-4 spacing">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <p class="card-text">"LogaXP has streamlined our appointment booking process and made it easier for our customers to schedule appointments."</p>
+                                            <h5 class="card-title">Tonia Churchill,Tatonia</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 spacing">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <p class="card-text">"We love the user-friendly interface and the responsiveness of LogaXP's customer support team."</p>
+                                            <h5 class="card-title"> George Akin, ProClean Int</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 spacing">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <p class="card-text">"Our business has seen a significant increase in appointment bookings since we started using LogaXP."</p>
+                                            <h5 class="card-title"> Gerry Matt, Security Vault</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="cta-section py-5">
+                        <div class="container text-center">
+                            <h2 class="mb-4">Ready to Revolutionize Your Appointment Management?</h2>
+                            <a href="{% url 'book:register' %}" class="btn btn-lg btn-primary">Get Started Today</a>
+                        </div>
+                    </section>
+                    <button onclick="scrollToTop()" id="scrollToTopBtn" title="Go to top">&uarr;</button>
+                    <!-- Partners or Clients Section -->
+                    <div class="jumbotron bg-light">
+                        <section id="partners" class="container py-5">
+                            <h2 class="text-center mb-5">Our Clients and Partners</h2>
+                            <div class="row text-center">
+                                <div class="col-md-3 col-sm-6 mb-4">
+                                    <img src="{% static 'img/newlogo12.png' %}" alt="Goal" class="rounded-circle" height="80" width="80">
+                                </div>
+                                <div class="col-md-3 col-sm-6 mb-4">
+                                    <img src="{% static 'img/Ourclientslogo.png' %}" alt="Goal" class="rounded-circle" height="80" width="80">
+                                </div>
+                                <div class="col-md-3 col-sm-6 mb-4">
+                                    <img src="{% static 'img/logo2.png' %}" alt="Goal" class="rounded-circle" height="80" width="80">
+                                </div>
+                                <div class="col-md-3 col-sm-6 mb-4">
+                                    <img src="{% static 'img/logo1.png' %}" alt="Goal" class="rounded-circle" height="80" width="80">
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                                        <!-- Footer -->
+                    <footer class="py-5 footer-bg">
+                        <div class="container">
+                        <div class="row">
+                            <div class="col-md-4">
+                            <nav>
+                                <ul class="list-unstyled active">
+                                <li><a href="#home">Home</a></li>
+                                <li><a href="#features">Features</a></li>
+                                <li><a href="#pricing">Pricing</a></li>
+                                <li><a href="#about">About Us</a></li>
+                                <li><a href="#contact">Contact Us</a></li>
+                                </ul>
+                            </nav>
+                            </div>
+                            <div class="col-md-4 address">
+                            <p>Address: 1105 Berry Street, Old Hickory, TN 37565</p>
+                            <p>Phone: (555) 123-4567</p>
+                            <p>Email: info@logaxp.com</p>
+                            </div>
+                            <div class="col-md-4">
+                            <div class="social-media mb-3">
+                                <a href="#" class="mr-2">Facebook</a>
+                                <a href="#" class="mr-2">Twitter</a>
+                                <a href="#" class="mr-2">LinkedIn</a>
+                                <a href="#" class="mr-2" >Instagram</a>
+                                <form method="post" action="{% url 'book:subscribe_newsletter' %}" id="newsletter_form">
+                                    {% csrf_token %}
+                                    <label for="{{ form.email.id_for_label }}" class="d-block mb-2">Subscribe to our newsletter</label>
+                                    <div class="input-group">
+                                        <input type="email" name="{{ form.email.html_name }}" id="{{ form.email.auto_id }}" class="form-control" placeholder="Enter your email" required>
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-primary">Subscribe</button>
+                                        </div>
+                                    </div>
+                                </form>
+                                
+                            </div>
+                        </div>
+                        </div>
+                    </footer>
+
+                    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+                    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                    <!-- Optional JavaScript for smooth scrolling -->   
+                    <script>
+                        $(document).ready(function() {
+                            $("#autocomplete").autocomplete({
+                                source: function(request, response) {
+                                    $.getJSON("{% url 'book:autocomplete' %}", {
+                                        term: request.term
+                                    }, response);
+                                },
+                                minLength: 2,
+                                select: function(event, ui) {
+                                    $("#autocomplete").val(ui.item.value);
+                                    $(this.form).submit();
+                                }
+                            });
+                        });
+                        
+                    </script>                             
+                </body>
+                </html>

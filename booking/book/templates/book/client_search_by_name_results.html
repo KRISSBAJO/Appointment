@@ -1,0 +1,112 @@
+s{% extends "book/base.html" %}
+{% load rating_filters %}
+{% load static %}
+{% block title %}Client Search by Name{% endblock %}
+
+{% block content %}
+<style>
+    .search-results {
+        margin-top: 2rem;
+    }
+
+    .client-card {
+        margin-bottom: 1rem;
+    }
+    .bg-gradient {
+        background: linear-gradient(45deg, #3f51b5, #9c27b0);
+    }
+    #search-button{
+        background: linear-gradient(45deg, #3f51b5, #9c27b0);
+        border: none;
+    }
+    .view-service{
+        background: linear-gradient(45deg, #3f51b5, #9c27b0);
+        border: none;
+    }
+    .view-service:hover{
+        background: linear-gradient(45deg, #3f51b5, #9c27b0);
+        border: none;
+    }
+    .view-service:focus{
+        background: linear-gradient(45deg, #3f51b5, #9c27b0);
+        border: none;
+    }
+    .card-title{
+        color: #3f51b5;
+       
+    }
+    .client-card{
+        background-color: #f5f5f5;
+        border-radius: 13px;
+        border-color: #cdd8e6;
+        border-width: 2px;
+    }
+    .card-text3{
+        color: #3f51b5;
+    }
+    .more-details{
+        color: #9c27b0;
+        font-weight: bold;
+        color: red;
+    }
+</style>
+<div class="text-center bg-gradient text-white py-5">
+    <h1 class="display-4">Find Clients by Business Name</h1>
+    <p class="lead">Search for clients using their business name and discover their services.</p>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="h3 mb-3 fw-normal text-center">Client Search by Name & Either Country, State or City</h2>
+            <form method="get" action="{% url 'book:client_search_by_name' %}">
+                {% csrf_token %}
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="search" placeholder="Search by business name..." required>
+                    <input type="text" class="form-control" name="country" placeholder="Country...">
+                    <input type="text" class="form-control" name="state" placeholder="State...">
+                    <input type="text" class="form-control" name="city" placeholder="City...">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary" id="search-button">Search</button>
+                    </div>
+                </div>
+            </form>
+            
+        </div>
+    </div>
+
+    <div class="row search-results">
+        {% for client in clients %}
+        <div class="col-md-4">
+            <div class="card client-card">
+                <div class="card-body">
+                    <h5 class="card-title"><span class="font-weight-bold"> Business Name:</span> {{ client.business_name }}</h5>
+                    <p class="card-text"><span class="font-weight-bold">Email:</span> {{ client.contact_email }}</p>
+                    <p class="card-text"><span class="font-weight-bold">Contact:</span> {{ client.contact_phone }}</p>
+                    <p class="card-text"><span class="font-weight-bold">Start Time:</span> {{ client.working_hours_start }}</p>
+                    <p class="card-text"><span class="font-weight-bold">Close Time:</span> {{ client.working_hours_end }}</p>
+                    <p class="card-text">City:<span class="more-details"> {{ client.city}} </span></p>
+                    <p class="card-text">State: <span class="more-details">{{ client.state }}</span></p>
+                    <p class="card-text3"><span class="font-weight-bold">Country:</span><span class="more-details"> {{ client.country }} </span> </p>
+
+                    <!-- Add this in the card body, where you want to display the average rating stars -->
+                    <p class="card-text">
+                        <span class="font-weight-bold">Average Rating:</span>
+                        <a href="{% url 'book:service_reviews' client.id %}">
+                        {% for i in "12345"|make_list %}
+                        <i class="star {{ avg_ratings.client.id|star_rating:i }}"></i>
+                        {% endfor %}
+                        </a>
+                    </p>                    
+                    <a href="{% url 'book:client_services' client.user.username %}" class="btn btn-primary view-service ">Visit Our Page</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <p class="text-center">No clients found with the given business name.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

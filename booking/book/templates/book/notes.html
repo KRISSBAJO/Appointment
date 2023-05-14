@@ -1,0 +1,53 @@
+{% extends 'book/base.html' %}
+
+{% block content %}
+<style>
+  .bg-gradient {
+    background: linear-gradient(45deg, #3f51b5, #9c27b0);
+}
+.container1 {
+    margin-top: 50px;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    
+}
+
+
+</style>
+<div class="text-center bg-gradient text-white py-5">
+    <div class="container">
+        <h1 class="display-4">Welcome to LogaXP</h1>
+        <p class="lead">Manage your note</p>
+    </div>
+</div>
+
+  <div class="container1">
+
+    <div class="row">
+      {% for note in notes %}
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{{ note.title }}</h5>
+              <p class="card-text">{{ note.content }}</p>
+            </div>
+            <div class="card-footer">
+              <a href="{% url 'book:edit_note' note.id %}" class="btn btn-primary mr-2">Edit</a>
+              <a href="{% url 'book:delete_note' note.id %}" class="btn btn-danger">Delete</a>
+              <a href="{% url 'book:add_note' %}" class="btn btn-primary">Add Note</a>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <div class="col">
+          <p>No notes found.</p>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="text-center mt-5">
+      <a href="{% url 'book:dashboard' %}" class="btn btn-primary">Back to Dashboard</a>
+    </div>
+  </div>
+{% endblock %}

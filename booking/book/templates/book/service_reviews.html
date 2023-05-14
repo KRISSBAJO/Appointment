@@ -1,0 +1,47 @@
+{% extends 'book/base.html' %}
+
+{% block content %}
+{% load static %}
+{% load rating_filters %}
+<style>
+  .bg-gradient {
+    background: linear-gradient(45deg, #3f51b5, #9c27b0);
+}
+.star {
+    color: red; /* Change this to the desired color */
+  }
+  
+  .star-empty {
+    color: #BDBDBD; /* Change this to the desired color for empty stars */
+  }
+  
+</style>
+<div class="text-center bg-gradient text-white py-5">
+  <div class="container">
+      <h1 class="display-4">Service Reviews</h1>
+      <p class="lead">Read the reviews of the service</p>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <hr>
+      <h2 class="services">Average Rating</h2>
+      <div>
+        {% for i in "12345"|make_list %}
+        <i class="star {{ avg_rating|star_rating:i }}"></i>
+        {% endfor %}
+      </div>
+      <h2 class="services">Reviews</h2>
+      <ul class="list-group">
+        {% for review in reviews %}
+          <li class="list-group-item">
+            <strong>{{ review.user.username }}:</strong> {{ review.comment }}<br>
+            <small>Rating: {{ review.rating }}/5</small>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock content %}

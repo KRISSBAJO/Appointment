@@ -1,0 +1,9 @@
+{% extends 'book/base.html' %}
+
+{% block content %}
+  <div class="container">
+    <h1 class="mt-4">Payment Failed</h1>
+    <p>Unfortunately, your payment could not be processed. Please try again or contact us for assistance.</p>
+    <a href="{% url 'book:index' %}" class="btn btn-primary">Return to Homepage</a>
+  </div>
+{% endblock %}

@@ -1,0 +1,152 @@
+{% extends 'book/base.html' %}
+
+{% load static %}
+
+{% block content %}
+<style>
+    /* Custom CSS styles */
+    .bg-gradient {
+        background: linear-gradient(45deg, #3f51b5, #9c27b0);
+    }
+
+    .form-container {
+        max-width: 400px;
+        padding: 1rem;
+        margin: auto;
+    }
+
+    .form-signin {
+        width: 100%;
+    }
+
+    .form-floating:focus-within {
+        z-index: 2;
+    }
+    .container-fluid {
+        margin-top: 20px;
+    }
+</style>
+<!-- Add Bootstrap CSS and JS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<div class="text-center bg-gradient text-white py-5">
+<h2 class="text-center my-4">Welcome to your dashboard, {{ request.user.client }} Services</h2>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action active">Dashboard</a>
+                <a href="{% url 'book:client_booking' request.user.username %}" class="list-group-item list-group-item-action">Appointments</a>
+                <a href="{% url 'book:client_customers' request.user.username %}" class="list-group-item list-group-item-action">Customers</a>
+                <a href="{% url 'book:client_reports' request.user.username %}" class="list-group-item list-group-item-action">Reports</a>
+                <a href="{% url 'book:initiate_payment' %}" class="list-group-item list-group-item-action">Payments</a>
+                <a href="{% url 'book:client_settings' request.user.username %}" class="list-group-item list-group-item-action">Settings</a>
+                <a href="{% url 'book:client_calendar' %}" class="list-group-item list-group-item-action">Calendar</a>
+                <a href="{% url 'book:notes' %}" class="list-group-item list-group-item-action">Notes</a>
+                <a href="{% url 'book:time_slots_list' %}" class="list-group-item list-group-item-action">Time Slots</a>
+                <a href="{% url 'book:time_slot_create' %}" class="list-group-item list-group-item-action">Add Booking Availabilty</a>
+                <a href="{% url 'book:stripe_subscription_payment' %}" class="list-group-item list-group-item-action">Stripe Subscription</a>
+                <a href="{% url 'book:client_review_management' %}" class="list-group-item list-group-item-action">Reviews</a>
+            </div>            
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+                        <div class="card-header">Total Appointments</div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ total_appointments }}</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-white bg-success mb-3" style="max-width: 18rem;">
+                        <div class="card-header">Upcoming Appointments</div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ today_appointments }}</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-white bg-warning mb-3" style="max-width: 18rem;">
+                        <div class="card-header">Pending Appointments</div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ pending_appointments }}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header">Latest Appointments</div>
+                                    <div class="card-body">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Date</th>
+                                                    <th scope="col">Time</th>
+                                                    <th scope="col">Customer</th>
+                                                    <th scope="col">Status</th>
+                                                    <th scope="col">Manage Bookings</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for appointment in latest_appointments %}
+                                                    <tr>
+                                                        <td>{{ appointment.date }}</td>
+                                                        <td>{{ appointment.time }}</td>
+                                                        <td>{{ appointment.customer.full_name }}</td>
+                                                        <td>{{ appointment.status }}</td>
+                                                        <td><a href="{% url 'book:edit_appointment' appointment.id %}">Edit</a></td>
+                                                    </tr>
+                                                {% empty %}
+                                                    <tr>
+                                                        <td colspan="5">No appointments found.</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                  </table>  
+                                    </div>   
+                                </div><br>
+                                <!-- Add pagination links -->
+                                <div class="d-flex justify-content-center">
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination">
+                                            {% if latest_appointments.has_previous %}
+                                                <li class="page-item"><a class="page-link" href="?page=1">&laquo;</a></li>
+                                                <li class="page-item"><a class="page-link" href="?page={{ latest_appointments.previous_page_number }}">previous</a></li>
+                                            {% endif %}
+
+                                            {% for i in latest_appointments.paginator.page_range %}
+                                                {% if latest_appointments.number == i %}
+                                                    <li class="page-item active"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                                                {% else %}
+                                                    <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                                                {% endif %}
+                                            {% endfor %}
+
+                                            {% if latest_appointments.has_next %}
+                                                <li class="page-item"><a class="page-link" href="?page={{ latest_appointments.next_page_number }}">next</a></li>
+                                                <li class="page-item"><a class="page-link" href="?page={{ latest_appointments.paginator.num_pages }}">&raquo;</a></li>
+                                            {% endif %}
+                                        </ul>
+                                    </nav>
+                                </div>                                      
+                             </div>
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
