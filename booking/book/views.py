@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic import TemplateView
-
 from book.mixins import ActiveClientRequiredMixin
 from .models import Client, Appointment, Review, Service, ServiceImage, Customer, ProfileImage, Customer, ServiceType, Subscription, UserSubscription
 from .forms import CustomerBookingForm, CustomerRegistrationForm, DashboardAppointmentForm, EditAppointmentForm, ReviewForm, ServiceTypeForm
@@ -17,20 +16,13 @@ from datetime import date
 from django.utils import timezone
 from .forms import ServiceSearchForm
 from django.views.generic import View,  DetailView, ListView
-from django.views import View
-from django.shortcuts import render
 from django.shortcuts import render, redirect
-from django.views import View
 from django.contrib.auth.models import User
 from .models import Client
 from .forms import ClientSettingsForm, ServiceForm, ServiceImageForm  # Import ServiceImageForm       
-from django.shortcuts import render
-from django.views import View
 from django.contrib.auth.models import User
 from .models import Client, Customer, Appointment
 from .models import Client, Appointment, Service
-import json
-from django.shortcuts import render
 import json
 from datetime import timedelta
 from decimal import Decimal
@@ -39,48 +31,110 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import AvailableTimeSlot
 from .forms import AvailableTimeSlotForm
 from django.http import HttpResponseForbidden, JsonResponse
-from django.views import View
 from .models import AvailableTimeSlot, Service
 from django.http import JsonResponse
-from django.views import View
 from .models import Appointment
 import json   
-from django.views import View
-from django.shortcuts import render
-from django.shortcuts import render
-from django.views import View
 from django.contrib.auth.models import User
 from .models import Client, Appointment
-from django.views import View
 from django.core.mail import send_mail
 from django.http import Http404, HttpResponseRedirect
-from django.urls import reverse
-from django.shortcuts import render
-
-from django.views import View
-from django.shortcuts import render
 from django.http import JsonResponse
-from .models import Appointment
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.views import View
 from .models import Note
 from .forms import NoteForm
-
-from django.views import View
-from django.http import JsonResponse
 # Import other required modules
-from django.views import View
-from django.http import JsonResponse
 from .models import Appointment
 from django.shortcuts import redirect
 from django.contrib.auth import login
 from django.contrib.auth.views import LoginView as AuthLoginView
 from .models import Client
 from django.contrib.auth.forms import AuthenticationForm
+from django.shortcuts import render, redirect
+from django.views import View
+from django.contrib import messages
+from .forms import NewsletterSubscriptionForm
 
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import UpdateView, DeleteView
+from .models import AvailableTimeSlot
+from .forms import AvailableTimeSlotForm
+from django.views.generic.edit import FormView
+from django.shortcuts import render
+from django.contrib import messages
+from django.urls import reverse
+from .models import NewsletterSubscriber
+from .forms import NewsletterSubscriptionForm
+from django.urls import reverse_lazy
+from django.core.mail import send_mail
+from django.http import JsonResponse
+from django.views import View
+from django.views import generic
+from .models import Client, Service
+from .forms import ServiceSearchForm
+from django.contrib.auth.views import (
+    PasswordResetView, PasswordResetDoneView,
+    PasswordResetConfirmView, PasswordResetCompleteView,
+)
+from django.http import JsonResponse
+from .models import ServiceType
+from django.views import View
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView
+
+from .models import Category
+from .forms import CategoryCreationForm
+from django.http import HttpResponse
+from .resources import AppointmentResource
+import tablib
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags  
+from paypalrestsdk import Payment
+
+import paypalrestsdk
+from django.contrib import messages
+from .forms import SendNewsletterForm
+from django.shortcuts import render, redirect
+from .models import Subscription
+from django.contrib.auth.models import User
+from .models import UserSubscription
+from django.conf import settings
+import stripe
+from datetime import datetime, timedelta
+
+from .models import UserSubscription, Subscription
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView
+
+from django.db.models import Count, F
+from datetime import datetime, timedelta
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.views import View
+from .models import Appointment  # Make sure to import the Appointment model
+from datetime import datetime, timedelta
+from datetime import datetime, time
+from django.core.paginator import Paginator, PageNotAnInteger
+from django.views.generic import ListView
+from book.models import AvailableTimeSlot
+from .forms import NewsletterSubscriptionForm
+from django.core.paginator import Paginator
+from django.contrib import messages
+from django.db.models import Q
+from django.http import JsonResponse
+from .models import Client, SubscriptionPrice
+from django.http import HttpResponse
+from django.views import View
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 class IndexView(TemplateView):
     template_name = 'book/index.html'
@@ -90,8 +144,6 @@ class IndexView(TemplateView):
         context['form'] = ServiceSearchForm()
         return context
 
-
-
 class RegisterView(View):
     template_name = 'book/register.html'
     
@@ -99,7 +151,6 @@ class RegisterView(View):
         form = ClientRegistrationForm()
         return render(request, self.template_name, {'form': form})
 
-    
     def post(self, request):
         form = ClientRegistrationForm(request.POST)
         if form.is_valid():
@@ -117,7 +168,6 @@ class RegisterView(View):
                 return redirect('book:login')
         return render(request, self.template_name, {'form': form})
 
-from django.core.paginator import Paginator
 
 class DashboardView(LoginRequiredMixin, View):
     def get(self, request):
@@ -160,71 +210,12 @@ class ChooseSubscriptionView(LoginRequiredMixin, View):
         return redirect('book:payment')
 
 
-from django.urls import reverse
-from paypalrestsdk import Payment
-
-# class SubscriptionPaymentView(View):
-#     def post(self, request):
-#         # Get subscription details from the form
-#         subscription_id = request.POST.get("subscription_type")
-#         subscription = Subscription.objects.get(id=subscription_id)
-
-#         # Create PayPal payment
-#         payment = Payment({
-#             "intent": "sale",
-#             "payer": {
-#                 "payment_method": "paypal"
-#             },
-#             "redirect_urls": {
-#                 "return_url": request.build_absolute_uri(reverse('book:success')),
-#                 "cancel_url": request.build_absolute_uri(reverse('book:cancel'))
-#             },
-#             "transactions": [{
-#                 "item_list": {
-#                     "items": [{
-#                         "name": subscription.name,
-#                         "sku": subscription.id,
-#                         "price": str(subscription.price),
-#                         "currency": "USD",
-#                         "quantity": 1
-#                     }]
-#                 },
-#                 "amount": {
-#                     "total": str(subscription.price),
-#                     "currency": "USD"
-#                 },
-#                 "description": subscription.description
-#             }]
-#         })
-
-#         if payment.create():
-#             print("Payment created successfully")
-#         else:
-#             print(payment.error)
-
-#         # Redirect the user to the PayPal checkout page
-#         for link in payment.links:
-#             if link.rel == "approval_url":
-#                 approval_url = link.href
-#                 return redirect(approval_url)
-
-#         return HttpResponse("Error processing payment")
-    
-from django.shortcuts import get_object_or_404
 
 
 class PaymentCancelView(View):
     def get(self, request):
         return render(request, 'book/payment_cancel.html')
     
-    
-    
-from paypalrestsdk import Payment
-
-from django.shortcuts import render
-from django.views import View
-import paypalrestsdk
-
 class ExecutePaymentView(View):
     def get(self, request, *args, **kwargs):
         # Set up your PayPal SDK configuration
@@ -246,22 +237,17 @@ class ExecutePaymentView(View):
         return render(request, 'payment_success.html')  # Render a template for successful payment
 
  
-from .models import Client, SubscriptionPrice
-from django.http import HttpResponse
-from django.views import View
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
-
 @method_decorator(csrf_exempt, name='dispatch')
 class WebhookListenerView(View):
     def post(self, request, *args, **kwargs):
         # Process the webhook event, update your records, and send a response
-        # ...
         return HttpResponse(status=200)
 
     def get(self, request, *args, **kwargs):
         return HttpResponse(status=405)  # Method not allowed
     
+
+
 class InitiatePaymentView(View):
     template_name = 'book/initiate_payment.html'
 
@@ -332,14 +318,6 @@ class InitiatePaymentView(View):
 
         return redirect('/')  # Redirect to another page if there's an error
 
-from django.shortcuts import render
-from django.views import View
-from django.contrib.auth.models import User
-from .models import UserSubscription
-
-from datetime import datetime, timedelta
-from django.shortcuts import render
-from .models import UserSubscription, Subscription
 
 class PaymentSuccessView(View):
     def get(self, request, *args, **kwargs):
@@ -372,46 +350,7 @@ class PaymentSuccessView(View):
         # Display a success message
         return render(request, 'book/success.html')
  
-
-
-# class PaymentSuccessView(View):
-#     def get(self, request):
-#         payment_id = request.GET.get("paymentId")
-#         payer_id = request.GET.get("PayerID")
-
-#         # Find the payment and get the transaction details
-#         payment = paypalrestsdk.Payment.find(payment_id)
-#         transaction = payment.transactions[0]
-
-#         # Extract client_id and subscription_id from the custom field
-#         custom_data = transaction.custom.split(',')
-#         client_id = int(custom_data[0].split(':')[1])
-#         subscription_id = int(custom_data[1].split(':')[1])
-
-#         # Find the Client and Subscription
-#         client = get_object_or_404(Client, id=client_id)
-#         subscription = get_object_or_404(Subscription, id=subscription_id)
-
-#         # Create a new UserSubscription instance and save it
-#         user_subscription = UserSubscription(
-#             client=client,
-#             subscription=subscription,
-#             start_date=timezone.now(),
-#             end_date=timezone.now() + timedelta(days=30),  # or any other duration
-#             active=True
-#         )
-#         user_subscription.save()
-
-#         return render(request, 'book/payment_success.html')
-
-
-from django.shortcuts import render, redirect
-from django.views import View
-from django.conf import settings
-import stripe
-
 stripe.api_key = settings.STRIPE_SECRET_KEY
-
 
 class StripePaymentView(View):
     template_name = "book/stripe_payment.html"
@@ -440,18 +379,11 @@ class StripePaymentView(View):
 
         return redirect('/')
 
-from django.shortcuts import render
-
 def payment_success(request):
     return render(request, 'book/payment_success.html')
 
 def payment_failure(request):
     return render(request, 'book/payment_failure.html')
-
-from django.views import View
-from django.shortcuts import render, redirect
-from django.urls import reverse
-from .models import Subscription
 
 class StripeSubscriptionPaymentView(View):
     def post(self, request):
@@ -462,8 +394,6 @@ class StripeSubscriptionPaymentView(View):
         # Render the Stripe payment page with the selected subscription
         return render(request, 'stripe_payment.html', {'subscription': subscription})
 
-
-
 class BusinessesView(ListView):
     model = Client
     template_name = 'book/businesses.html'
@@ -472,8 +402,7 @@ class BusinessesView(ListView):
     def get_queryset(self):
         service_id = self.kwargs['service_id']
         return Client.objects.filter(service__id=service_id)
-
-
+    
 class ServicesView(ListView):
     model = Service
     template_name = 'book/services.html'
@@ -486,12 +415,6 @@ class ServicesView(ListView):
         else:
             return Service.objects.all()
 
-
-
-from django.shortcuts import render, get_object_or_404
-
-# ...
-
 class BookingConfirmationView(LoginRequiredMixin, View):
     def get(self, request, appointment_id):
         appointment = get_object_or_404(Appointment, pk=appointment_id)
@@ -499,10 +422,6 @@ class BookingConfirmationView(LoginRequiredMixin, View):
         deposit_amount = appointment.service.deposit_amount
 
         return render(request, 'book/booking_confirmation.html', {'appointment': appointment, 'deposit_required': deposit_required, 'deposit_amount': deposit_amount})
-
-
-from django.views import View
-from django.shortcuts import render
 
 class BookingSuccessView(View):
     def get(self, request):
@@ -516,10 +435,6 @@ class ClientServiceView(View):
         service_types = ServiceType.objects.filter(service__client=client)
         service_images = ServiceImage.objects.filter(service_type__in=service_types)[:10]  # Fetch the first 10 service images
         return render(request, 'book/client_services.html', {'client': client, 'service_types': service_types, 'service_images': service_images})
-
-from django.shortcuts import get_object_or_404
-
-from django.forms.models import ModelChoiceField
 
 class ClientBookingView(ActiveClientRequiredMixin, View):
     def get(self, request, username):
@@ -615,8 +530,6 @@ class ClientBookingView(ActiveClientRequiredMixin, View):
             return redirect('book:booking_confirmation', appointment_id=appointment.pk)
 
 
-from django.core.paginator import Paginator
-
 class ClientCustomersView(View):
     def get(self, request, username):
         user = User.objects.get(username=username)
@@ -635,8 +548,6 @@ class ClientCustomersView(View):
         }
 
         return render(request, 'book/client_customers.html', context)
-
-
 
 class ClientSettingsView(View):
     def get(self, request, username):
@@ -701,11 +612,6 @@ class ClientSettingsView(View):
         return redirect('book:client_settings', username=username)
 
 
-
-
-
-from django.shortcuts import render, redirect, get_object_or_404
-
 class UpdateServiceImageView(View):
     def get(self, request, service_image_id):
         service_image = get_object_or_404(ServiceImage, id=service_image_id)
@@ -729,7 +635,6 @@ class DeleteServiceImageView(View):
         service_image.delete()
         return redirect('book:client_settings', username=request.user.username)
 
-from django.core.paginator import Paginator
 
 class ClientReportsView(View):
     def get(self, request, username):
@@ -773,9 +678,7 @@ class PricingView(TemplateView):
             },
         ]
         return context
-import stripe
-from django.conf import settings
-from django.http import JsonResponse
+
 
 class PaymentView(View):
     def get(self, request, appointment_id):
@@ -811,8 +714,6 @@ class PaymentView(View):
             return JsonResponse({"error": str(e)})
 
 
-from django.shortcuts import render
-from django.views import View
 
 class SubscriptionPaymentView(View):
     def get(self, request):
@@ -824,18 +725,9 @@ class SuccessView(View):
         return render(request, 'book/success.html')
 
 
-from django.shortcuts import render
-
-# Other imports
-
-from django.views import View
-from django.shortcuts import render
-
 class CancelView(View):
     def get(self, request):
         return render(request, 'book/cancel.html')
-
-
 
 class ContactView(View):
     def get(self, request):
@@ -870,12 +762,6 @@ class FeaturesView(View):
     def get(self, request):
         return render(request, 'book/features.html')
 
-from django.db.models import Count, F
-from datetime import datetime, timedelta
-from django.http import JsonResponse
-from django.shortcuts import render
-from django.views import View
-from .models import Appointment  # Make sure to import the Appointment model
 
 class ClientCalendarView(View):
     template_name = 'book/client_calendar.html'
@@ -909,7 +795,6 @@ class GetAppointmentDetailsView(View):
         appointment = get_object_or_404(Appointment, id=appointment_id)
         details = f"Client: {appointment.customer}, Time: {appointment.time}"
         return JsonResponse({'details': details}, safe=False)
-
 
 
 class AppointmentAPIView(View):
@@ -954,13 +839,11 @@ class AppointmentDetailView(DetailView):
     template_name = 'book/appointment_detail.html'
 
 
-
 @method_decorator(login_required, name='dispatch')
 class NotesView(View):
     def get(self, request, *args, **kwargs):
         notes = Note.objects.filter(user=request.user)
         return render(request, 'book/notes.html', {'notes': notes})
-
 
 @method_decorator(login_required, name='dispatch')
 class AddNoteView(View):
@@ -1001,13 +884,10 @@ class DeleteNoteView(View):
         note.delete()
         return redirect('book:notes')
 
-from django.views.generic import TemplateView
 
 class EasySchedulingView(TemplateView):
     template_name = 'book/easy_scheduling.html'
 
-from django.views import View
-from django.shortcuts import render
 
 class MobileFriendlyView(View):
     def get(self, request, *args, **kwargs):
@@ -1017,9 +897,6 @@ from django.shortcuts import render
 
 class SecurePlatformView(TemplateView):
     template_name = "book/secure_platform.html"
-
-
-from datetime import datetime, timedelta
 
 class AvailableSlotsView(View):
     def get(self, request, *args, **kwargs):
@@ -1047,8 +924,6 @@ class AvailableSlotsView(View):
 
         return JsonResponse(response_data)
 
-from django.http import JsonResponse
-from django.views import View
 
 class UpdateTimeSlotsView(View):
     def get(self, request):
@@ -1063,14 +938,6 @@ class UpdateTimeSlotsView(View):
             return JsonResponse({'time_slots': time_slot_data})
         else:
             return JsonResponse({'time_slots': []})
-
-
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView
-from .models import AvailableTimeSlot
-
-from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
 
 class TimeSlotCreateView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
@@ -1128,8 +995,6 @@ class TimeSlotCreateView(LoginRequiredMixin, View):
         return render(request, 'book/time_slot_form.html', context)
 
 
-from datetime import datetime, time
-
 def generate_time_slots(working_days, start_time, end_time, service_duration):
     time_slots = []
     today = timezone.localdate()
@@ -1153,14 +1018,6 @@ def generate_time_slots(working_days, start_time, end_time, service_duration):
     return time_slots
 
 
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView
-from .models import AvailableTimeSlot
-
-from django.core.paginator import Paginator, PageNotAnInteger
-from django.views.generic import ListView
-from book.models import AvailableTimeSlot
-
 class TimeSlotsListView(LoginRequiredMixin, ListView):
     model = AvailableTimeSlot
     template_name = 'book/time_slots_list.html'
@@ -1172,12 +1029,6 @@ class TimeSlotsListView(LoginRequiredMixin, ListView):
         queryset = super().get_queryset()
         return queryset.filter(client=self.request.user.client).order_by('date', 'time')
 
-
-
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import UpdateView, DeleteView
-from .models import AvailableTimeSlot
-from .forms import AvailableTimeSlotForm
 
 class TimeSlotUpdateView(LoginRequiredMixin, UpdateView):
     model = AvailableTimeSlot
@@ -1362,36 +1213,7 @@ from django.shortcuts import render
 def test_checkboxes(request):
     form = ClientRegistrationForm()
     return render(request, 'book/test_checkboxes.html', {'form': form})
-from django.shortcuts import render, redirect
-from django.views import View
-from django.contrib import messages
-from .forms import NewsletterSubscriptionForm
 
-from django.views.generic.edit import FormView
-from django.shortcuts import render
-from django.contrib import messages
-from django.views.generic.edit import FormView
-from .models import NewsletterSubscriber
-from .forms import NewsletterSubscriptionForm
-from django.urls import reverse_lazy
-
-from django.core.mail import send_mail
-from django.http import JsonResponse
-from django.views import View
-from .models import NewsletterSubscriber
-
-
-from django.core.mail import send_mail
-from django.views import View
-from django.contrib import messages
-from django.shortcuts import render, redirect
-from .forms import SendNewsletterForm
-from .models import NewsletterSubscriber
-from django.shortcuts import render, redirect
-from .forms import NewsletterSubscriptionForm
-from .models import NewsletterSubscriber
-from django.contrib import messages
-from django.http import JsonResponse
 
 def subscribe_newsletter(request):
     if request.method == 'POST':
@@ -1406,10 +1228,6 @@ def subscribe_newsletter(request):
 
     return render(request, 'book/index.html', {'form': form})
 
-from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
-from django.utils.html import strip_tags
-from .models import NewsletterSubscriber
 
 class SendNewsletterView(View):
     def get(self, request):
@@ -1446,8 +1264,7 @@ class NewsletterSuccessView(TemplateView):
     template_name = 'book/newsletter_success.html'
 
 
-from django.views import View
-from django.shortcuts import render
+
 
 # Your other views and imports
 
@@ -1455,15 +1272,11 @@ class DisabledClientView(View):
     def get(self, request):
         return render(request, 'book/disabled_client.html')
 
-from django.views.generic import TemplateView
+
 
 class ItIndexView(TemplateView):
     template_name = 'book/it_index.html'
 
-from django.contrib.auth.views import (
-    PasswordResetView, PasswordResetDoneView,
-    PasswordResetConfirmView, PasswordResetCompleteView,
-)
 
 class CustomPasswordResetView(PasswordResetView):
     template_name = 'book/password_reset.html'
@@ -1481,9 +1294,6 @@ class CustomPasswordResetCompleteView(PasswordResetCompleteView):
     template_name = 'book/password_reset_complete.html'
     
 
-from django.http import HttpResponse
-from .resources import AppointmentResource
-import tablib
 
 def export_appointments(request):
     appointment_resource = AppointmentResource()
@@ -1493,11 +1303,7 @@ def export_appointments(request):
     return response
 
 
-from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView
-from django.core.mail import send_mail
-from .models import Category
-from .forms import CategoryCreationForm
+
 
 class CreateCategoryView(CreateView):
     model = Category
@@ -1521,10 +1327,6 @@ class CreateCategoryView(CreateView):
         
         return super().form_valid(form)
 
-from django.views import generic
-from .models import Client, Service
-from .forms import ServiceSearchForm
-
 class ClientSearchView(generic.ListView):
     model = Client
     template_name = 'book/search_results.html'
@@ -1532,20 +1334,26 @@ class ClientSearchView(generic.ListView):
     
     def get_queryset(self):
         category = self.request.GET.get('category', '')
+        country = self.request.GET.get('country', '')
+        state = self.request.GET.get('state', '')
+        city = self.request.GET.get('city', '')
 
         queryset = Client.objects.all()
 
         if category:
             queryset = queryset.filter(category__id=category)
+            
+        if country:
+            queryset = queryset.filter(country__icontains=country)
+            
+        if state:
+            queryset = queryset.filter(state__icontains=state)
+            
+        if city:
+            queryset = queryset.filter(city__icontains=city)
 
         return queryset.distinct()
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = ServiceSearchForm(self.request.GET)
-        return context
-
-from django.http import JsonResponse
 
 def autocomplete(request):
     query = request.GET.get('term', '')
@@ -1554,7 +1362,7 @@ def autocomplete(request):
     return JsonResponse(results, safe=False)
 
 
-from django.db.models import Q
+
 
 class ClientSearchByNameView(generic.ListView):
     model = Client
@@ -1585,26 +1393,34 @@ class ClientSearchByNameView(generic.ListView):
         context = super().get_context_data(**kwargs)
         clients = self.get_queryset()
 
+        # Check if queryset is empty
+        if not clients:
+            context['message'] = 'No clients found matching your search criteria. Please modify your search and try again.'
+            return context
+
         avg_ratings = {}
         client_details = {}
 
         for client in clients:
             total_rating = 0
             count = 0
-            service = client.service  # Access the related Service object directly
 
-            for review in service.review_set.all():
-                total_rating += review.rating
-                count += 1
+            # Check if the client has a related Service object
+            if hasattr(client, 'service'):
+                service = client.service  # Access the related Service object directly
 
-            avg_ratings[client.id] = total_rating / count if count > 0 else 0
+                for review in service.review_set.all():
+                    total_rating += review.rating
+                    count += 1
 
-            # Fetch city, state, and country for each client
-            client_details[client.id] = {
-                'city': client.city,
-                'state': client.state,
-                'country': client.country,
-            }
+                avg_ratings[client.id] = total_rating / count if count > 0 else 0
+
+                # Fetch city, state, and country for each client
+                client_details[client.id] = {
+                    'city': client.city,
+                    'state': client.state,
+                    'country': client.country,
+                }
 
         context['avg_ratings'] = avg_ratings
         context['client_details'] = client_details
@@ -1612,11 +1428,6 @@ class ClientSearchByNameView(generic.ListView):
         return context
 
 
-from django.http import JsonResponse
-from .models import ServiceType
-from django.views import View
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
 
 @method_decorator(csrf_exempt, name='dispatch')
 class ServiceTypeApiView(View):
@@ -1634,3 +1445,9 @@ class ServiceTypeApiView(View):
             return JsonResponse(service_types_data, safe=False, status=200)
 
         return JsonResponse({'error': 'Missing service_id'}, status=400)
+
+
+
+class FAQView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'book/faq.html')

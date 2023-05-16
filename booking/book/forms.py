@@ -125,7 +125,6 @@ from django import forms
 from django import forms
 from .models import Category
 
-
 class ServiceSearchForm(forms.Form):
     search = forms.CharField(
         required=False,
@@ -140,7 +139,18 @@ class ServiceSearchForm(forms.Form):
         queryset=Category.objects.filter(enabled=True),
         empty_label="Select Service Category"
     )
-
+    country = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'placeholder': 'Country'})
+    )
+    state = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'placeholder': 'State'})
+    )
+    city = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'placeholder': 'City'})
+    )
 
 
 from django import forms

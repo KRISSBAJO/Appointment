@@ -6,33 +6,14 @@
     .bg-gradient {
         background: linear-gradient(45deg, #3f51b5, #9c27b0);
     }
-
     .form-container {
-        max-width: 400px;
-        padding: 1.5rem;
+        max-width: 600px;
+        padding: 2rem;
         margin: auto;
     }
-
-    .form-signin {
-        width: 100%;
-    }
-
-    .form-floating:focus-within {
-        z-index: 2;
-    }
-    .container {
-        margin-top: 50px;
-    }
-    .bt-custom {
-        background-color: #3f51b5;
-        color: #fff;
-    }
-    .bt-custom:hover {
-        background-color: #9c27b0;
-        color: #fff;
-    }
     .card {
-        border-radius: 0;
+        border-radius: 10px;
+        box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
     }
     .card-header {
         background-color: #3f51b5;
@@ -40,20 +21,28 @@
         text-align: center;
         text-transform: uppercase;
         font-weight: bold;
-
     }
-    .card-body {
-        padding: 2rem;
+    .form-label {
+        font-size: 0.875em;
+        color: #495057;
+        font-weight: 600;
     }
-    .card-body .btn {
-        width: 100%;
+    .form-control {
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        padding: 0.5rem 1rem;
     }
-    .card-body .btn:hover {
+    .bt-custom {
+        background-color: #3f51b5;
+        color: #fff;
+        font-weight: 600;
+    }
+    .bt-custom:hover {
         background-color: #9c27b0;
         color: #fff;
     }
-   
 </style>
+
 <div class="text-center bg-gradient text-white py-5">
     <div class="container">
         <h1 class="display-4">Customer Registration Portal</h1>
@@ -61,33 +50,34 @@
     </div>
 </div>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <div class="card">
-                <div class="card-header">Create An Account</div>    
-                <div class="card-body">
-                    <form method="post">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            {{ form.name.label_tag }} {{ form.name }}
-                        </div>
-                        <div class="mb-3">
-                            {{ form.email.label_tag }} {{ form.email }}
-                        </div>
-                        <div class="mb-3">
-                            {{ form.phone_number.label_tag }} {{ form.phone_number }}
-                        </div>
-                        <div class="mb-3">
-                            {{ form.password1.label_tag }} {{ form.password1 }}
-                        </div>
-                        <div class="mb-3">
-                            {{ form.password2.label_tag }} {{ form.password2 }}
-                        </div>
-                        <button type="submit" class="btn bt-custom">Register</button>
-                    </form>
+<div class="container py-5">
+    <div class="form-container card mx-auto">
+        <div class="card-header">Create An Account</div>    
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="{{ form.name.id_for_label }}" class="form-label">{{ form.name.label }}</label>
+                    {{ form.name }}
                 </div>
-            </div>
+                <div class="mb-3">
+                    <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.email.label }}</label>
+                    {{ form.email }}
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.phone_number.id_for_label }}" class="form-label">{{ form.phone_number.label }}</label>
+                    {{ form.phone_number }}
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.password1.id_for_label }}" class="form-label">{{ form.password1.label }}</label>
+                    {{ form.password1 }}
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.password2.id_for_label }}" class="form-label">{{ form.password2.label }}</label>
+                    {{ form.password2 }}
+                </div>
+                <button type="submit" class="btn bt-custom">Register</button>
+            </form>
         </div>
     </div>
 </div>

@@ -7,6 +7,9 @@ from django.contrib.auth.views import  LogoutView
 from book.views import LoginView
 from book import views
 from book.views import InitiatePaymentView, PaymentSuccessView, WebhookListenerView
+from book.views import FAQView
+
+
 
 app_name = 'book'
 
@@ -116,6 +119,8 @@ urlpatterns = [
     path('stripe_subscription_payment/', views.StripeSubscriptionPaymentView.as_view(), name='stripe_subscription_payment'),
     
      path('api/service-types/', views.ServiceTypeApiView.as_view(), name='get_service_types'),
+     path('faq/', FAQView.as_view(), name='faq'),
+   
 
 
 

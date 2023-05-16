@@ -1,0 +1,55 @@
+{% extends "book/base.html" %}
+
+{% block title %}FAQ{% endblock %}
+
+{% block content %}
+<style>
+    .faq-container {
+        max-width: 800px;
+        margin: auto;
+        padding: 1.5rem;
+    }
+    .faq-item {
+        margin-bottom: 1.5rem;
+    }
+    .faq-question {
+        font-weight: bold;
+    }
+    /* Custom CSS styles */
+    .bg-gradient {
+        background: linear-gradient(45deg, #3f51b5, #9c27b0);
+    }
+</style>
+
+<div class="text-center bg-gradient text-white py-5">
+    <h1 class="display-4">Frequently Asked Questions</h1>
+    <p class="lead">Find answers to the most common questions about our booking system.</p>
+</div>
+
+<div class="container mt-5">
+    <div class="faq-container">
+        <div class="faq-item">
+            <p class="faq-question">Question 1: How can I book an appointment?</p>
+            <p>Answer: You can book an appointment by navigating to the 'Book Appointment' section on our website, selecting the available date and time that suits you, and confirming your booking.</p>
+        </div>
+        <div class="faq-item">
+            <p class="faq-question">Question 2: How can I change or cancel my appointment?</p>
+            <p>Answer: You can change or cancel your appointment by logging into your account, navigating to 'My Appointments' section and clicking on the 'Change' or 'Cancel' button next to the appointment you wish to modify.</p>
+        </div>
+        <div class="faq-item">
+            <p class="faq-question">Question 3: What is the difference between a Service and a Service Type?</p>
+            <p>Answer: A Service represents a general category of services that a client offers, while a Service Type is a specific kind of service within that category. For example, a hair salon might have a Service called 'Hair Styling', and Service Types within that category might include 'Women's Cut', 'Men's Cut', 'Children's Cut', etc.</p>
+        </div>
+        <div class="faq-item">
+            <p class="faq-question">Question 4: What does 'Pending', 'Confirmed', 'Completed', and 'Canceled' status of an appointment mean?</p>
+            <p>Answer: These statuses represent the different stages of an appointment. 'Pending' means the appointment has been booked but not yet confirmed. 'Confirmed' means the appointment has been verified and is scheduled to take place. 'Completed' means the appointment has already happened, and 'Canceled' means the appointment was called off.</p>
+        </div>
+        <div class="faq-item">
+            <p class="faq-question">Question 5: What information should I provide when booking an appointment?</p>
+            <p>Answer: When booking an appointment, you should provide your name, contact information, the type of service you're interested in, and your preferred date and time. It's also helpful to include any additional information that might help us better serve you, such as special requests or considerations.</p>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

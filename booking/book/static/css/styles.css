@@ -117,26 +117,13 @@ body {
     border-radius: 0;
     font-size: 1.5rem;
 }
-.card-title{
-    font-size: 1.5rem;
-    font-weight: 500;
-    color: #007bff;
-}
-#card-title {
-    font-size: 1.5rem;
-    font-weight: 500;
-    color: #007bff;
-}
+
 #say{
       font-size: 1.5rem;
       font-weight: 700;
       color: #14213d;
 }
-#mission{
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #14213d;
-}
+
  #serach-button{
           font-size: 1.5rem;
           font-weight: 700;
@@ -150,8 +137,20 @@ h1, h2, h3, h4, h5, h6, p {
     margin-top: 20px;
     margin-bottom: 20px;
 }
-.container, .card {
-    padding: 20px;
+#scrollToTopBtn {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 99;
+    font-size: 18px;
+    border: none;
+    outline: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 4px;
 }
 #scrollToTopBtn {
     
@@ -162,7 +161,7 @@ h1, h2, h3, h4, h5, h6, p {
     border-radius: 4px;
     font-size: 18px;
   }
-  
 
+ 
 
 

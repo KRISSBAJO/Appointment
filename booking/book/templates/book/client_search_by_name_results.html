@@ -1,4 +1,4 @@
-s{% extends "book/base.html" %}
+{% extends "book/base.html" %}
 {% load rating_filters %}
 {% load static %}
 {% block title %}Client Search by Name{% endblock %}
@@ -49,16 +49,34 @@ s{% extends "book/base.html" %}
         font-weight: bold;
         color: red;
     }
+    #message{
+        color: #3f51b5;
+        border-radius: 13px;
+        border-width: 2px;
+        text-align: center;
+    }
+    #streamline{
+        color: #3f51b5;
+        border-radius: 13px;
+        border-width: 2px;
+        text-align: center;
+    }
 </style>
 <div class="text-center bg-gradient text-white py-5">
     <h1 class="display-4">Find Clients by Business Name</h1>
     <p class="lead">Search for clients using their business name and discover their services.</p>
 </div>
+{% if message %}
+<div id="message" class="alert alert-info">
+  {{ message }}
+</div>
+{% endif %}
+
 
 <div class="container mt-5">
     <div class="row">
         <div class="col-12">
-            <h2 class="h3 mb-3 fw-normal text-center">Client Search by Name & Either Country, State or City</h2>
+            <h2 class="h3 mb-3 fw-normal text-center">Client Search</h2>
             <form method="get" action="{% url 'book:client_search_by_name' %}">
                 {% csrf_token %}
                 <div class="input-group mb-3">
@@ -104,9 +122,25 @@ s{% extends "book/base.html" %}
         </div>
         {% empty %}
         <div class="col-12">
-            <p class="text-center">No clients found with the given business name.</p>
+            <p class="text-center" id="streamline">
+                To streamline your search, try using both the business name and location. 
+                This will help narrow down your results and find the right client faster. 
+                Happy searching!
+             </p>
+             
         </div>
         {% endfor %}
     </div>
 </div>
+<script>
+    window.onload = function() {
+      setTimeout(function() {
+        var msg = document.getElementById('message');
+        if (msg) {
+            msg.style.display = 'none';
+        }
+      }, 6000);  // Hide after 6 seconds
+    };
+    </script>
+    
 {% endblock content %}

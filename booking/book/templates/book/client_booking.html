@@ -23,6 +23,29 @@
   .container-fluid {
       margin-top: 20px;
   }
+  .form-control {
+    border-radius: 0;
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #333;
+}
+
+.btn-primary {
+    background-color: #e0b1cb;
+    border-color: #e0b1cb;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 0;
+}
+
+.btn-primary:hover {
+    background-color: #5e548e;
+    border-color: #0056b3;
+}
 </style>
 
 <div class="text-center bg-gradient text-white py-5">
@@ -38,41 +61,47 @@
             <div class="card">
                 <div class="card-body">
                   <form method="post" action="{% url 'book:client_booking' client.user.username %}">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label for="{{ form.service.auto_id }}">{{ form.service.label }}</label>
+                    {% csrf_token %}
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="{{ form.service.auto_id }}" class="form-label">{{ form.service.label }}</label>
                             {{ form.service }}
                         </div>
-                        <div class="form-group">
-                            <label for="{{ form.service_type.auto_id }}">{{ form.service_type.label }}</label>
+                        <div class="col-md-6">
+                            <label for="{{ form.service_type.auto_id }}" class="form-label">{{ form.service_type.label }}</label>
                             {{ form.service_type }}
                         </div>
-                        
-                        <div class="form-group">
-                            <label for="dateInput">Date:</label>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="dateInput" class="form-label">Date:</label>
                             <input type="date" id="dateInput" name="{{ form.date.html_name }}" class="form-control">
                         </div>
-                        <div class="form-group">
-                            <label for="{{ form.name.auto_id }}">{{ form.name.label }}</label>
+                        <div class="col-md-6">
+                            <label for="timeSlots" class="form-label">Time:</label>
+                            <select id="timeSlots" class="form-control"></select>
+                            <input type="hidden" id="selected_time_slot" name="{{ form.time_slot.html_name }}">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="{{ form.name.auto_id }}" class="form-label">{{ form.name.label }}</label>
                             {{ form.name }}
                         </div>
-                        <div class="form-group">
-                            <label for="{{ form.email.auto_id }}">{{ form.email.label }}</label>
+                        <div class="col-md-6">
+                            <label for="{{ form.email.auto_id }}" class="form-label">{{ form.email.label }}</label>
                             {{ form.email }}
                         </div>
-                        <div class="form-group">
-                            <label for="{{ form.phone_number.auto_id }}">{{ form.phone_number.label }}</label>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="{{ form.phone_number.auto_id }}" class="form-label">{{ form.phone_number.label }}</label>
                             {{ form.phone_number }}
                         </div>
-                        
-                        <!-- Add time slots dropdown and a hidden input field -->
-                        <div class="form-group">
-                          <label for="timeSlots">Time:</label>
-                          <select id="timeSlots" class="form-control"></select>
-                          <input type="hidden" id="selected_time_slot" name="{{ form.time_slot.html_name }}">
-                        </div>
-                        <button type="submit" class="btn btn-primary">Book Appointment</button>
-                    </form>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Book Appointment</button>
+                </form>
+                
                 </div>
             </div>
         </div>
